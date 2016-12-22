@@ -1,16 +1,36 @@
-import Main from './views/main.vue'
+import Container from './views/Container.vue'
 
-import Test from './views/main/test.vue'
+import StoreManage from './views/StoreManage.vue'
+import StoreDetils from './views/StoreManage/StoreDetils.vue'
+import CarModels from './views/StoreManage/CarModels.vue'
+import CarList from './views/StoreManage/CarList.vue'
 
 const routes = [
   {
     path: '/',
-    component: Main,
+    component: Container,
     children: [
       {
-        path: '/test',
-        name: 'test',
-        component: Test
+        path: 'stores',
+        name: 'StoreManage',
+        component: StoreManage,
+        children: [
+          {
+            path: 'details',
+            name: 'StoreDetils',
+            component: StoreDetils
+          },
+          {
+            path: 'models',
+            name: 'CarModels',
+            component: CarModels
+          },
+          {
+            path: 'carlist',
+            name: 'CarList',
+            component: CarList
+          }
+        ]
       }
     ]
   }

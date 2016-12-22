@@ -3,32 +3,27 @@
     <el-row>
       <el-col
         :span='4'>
-        <nav class="left-nav">
-
-        </nav>
+        <left-nav></left-nav>
       </el-col>
       <el-col
         :span='20'>
-        <main class="right-main">
-
-        </main>
+        <router-view></router-view>
       </el-col>
     </el-row>
-    <router-view></router-view>
   </div>
 </template>
 
 <script>
+import LeftNav from '../components/Nav.vue'
+
 export default {
+  components: {
+    LeftNav
+  }
 }
 </script>
 
 <style lang="css">
-.left-nav {
-  background-color: red;
-  height: 30px;
-}
-
 .right-main {
   background-color: blue;
   height: 30px;

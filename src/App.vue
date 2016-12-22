@@ -17,6 +17,11 @@ export default {
 
 <style>
 body {
+  font-family: 'PingFang SC', 'Helvetica Neue', 'Helvetica', 'STHeitiSC-Light', 'Arial', sans-serif;
+  user-select: none;
+}
+
+body, h1{
   padding: 0;
   margin: 0;
 }

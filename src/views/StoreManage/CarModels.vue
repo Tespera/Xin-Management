@@ -10,26 +10,26 @@
       <el-table
         :data='modelInfo'>
         <el-table-column
-          prop='gname'
+          prop='data.gname'
           label='车型'>
         </el-table-column>
         <el-table-column
-          prop='bname'
+          prop='data.bname'
           label='商家'>
         </el-table-column>
         <el-table-column
-          prop='title'
+          prop='data.title'
           label='活动'>
         </el-table-column>
         <el-table-column
           inline-template
           label='价格区间'>
           <div>
-            {{ row.minprice + '-' + row.maxprice}}
+            {{ row.data.minprice + '-' + row.data.maxprice}}
           </div>
         </el-table-column>
         <el-table-column
-          prop='gdate'
+          prop='data.gdate'
           label='创建时间'
           :formatter='dateFormatter'>
         </el-table-column>
@@ -94,13 +94,13 @@ export default {
       })
     },
     dateFormatter(row) {
-      let value = new Date(row.gdate)
+      let value = new Date(row.data.gdate)
       let blank = '/'
       let str = value.getFullYear() + blank + (value.getMonth() + 1) + blank + (value.getDate())
       return str
     },
     handleCarEdit($index, row, column) {
-      this.$router.push({name: 'CarList', query: { gid: row.gid, bid: row.bid}})
+      this.$router.push({name: 'CarList', query: { gid: row.data.gid, bid: row.data.bid}})
     },
     handleCurrentChange(val) {
       this.initData(val)

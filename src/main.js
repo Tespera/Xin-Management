@@ -9,6 +9,7 @@ import 'element-ui/lib/theme-default/index.css'
 
 import axios from 'axios'
 import VueAxios from 'vue-axios'
+import qs from 'qs'
 
 document.addEventListener('DOMContentLoaded', function() {
   if (window.FastClick) window.FastClick.attach(document.body);
@@ -18,8 +19,16 @@ Vue.use(ElementUI)
 Vue.use(VueRouter)
 Vue.use(VueAxios, axios)
 
-axios.defaults.baseURL = store.state.baseURL;
-axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+Vue.axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+
+Vue.axios.defaults.baseURL = store.state.baseURL;
+
+Vue.axios.interceptors.request.use((request) => {
+  if (request.data && request.headers['Content-Type'] === 'application/x-www-form-urlencoded') {
+      request.data = qs.stringify(request.data);
+  }
+  return request;
+});
 
 const router = new VueRouter({
   routes

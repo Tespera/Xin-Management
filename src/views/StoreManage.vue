@@ -17,11 +17,14 @@ export default {
 </script>
 
 <style lang="css">
+.store-manage {
+  padding: 0 20px;
+}
+
 .store-manage .right-header {
   display: flex;
   height: 56px;
   align-items: center;
-  padding-left: 20px;
 }
 
 .store-manage .detail-route {
@@ -34,13 +37,34 @@ export default {
   color: #20a0ff;
 }
 
+.store-manage .store-tooltip {
+  background-color: #EFF2F7;
+  height: 40px;
+  box-sizing: border-box;
+  border: 1px solid #e0e6ed;
+  border-bottom: 0;
+  vertical-align: middle;
+  color: #8492a6;
+  /*color: #1f2d3d;*/
+  /*font-size: 14px;*/
+  display: flex;
+  justify-content: flex-end;
+  align-content: stretch;
+}
+
+.store-manage .store-tooltip .el-button--text {
+  width: 40px;
+  box-sizing: border-box;
+  border-radius: 0;
+  border-left: 1px solid #e0e6ed;
+}
+
 .store-manage .store-table {
-  padding: 0 20px;
+
 }
 
 .store-manage .store-pagination .el-pagination {
   text-align: center;
   margin-top: 15px;
-  padding: 0 20px;
 }
 </style>

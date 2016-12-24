@@ -11,63 +11,59 @@
       <el-table
         :data='carInfo'>
         <el-table-column
-          prop='mname'
+          prop='data.mname'
           label='车名'>
         </el-table-column>
         <el-table-column
-          prop='level'
+          prop='data.level'
           label='等级'>
         </el-table-column>
         <el-table-column
-          prop='output'
+          prop='data.output'
           label='排量'>
         </el-table-column>
         <el-table-column
-          prop='drive'
+          prop='data.drive'
           label='驱动'>
         </el-table-column>
         <el-table-column
-          prop='fuel'
+          prop='data.fuel'
           label='燃料'>
         </el-table-column>
         <el-table-column
-          prop='transmission'
+          prop='data.transmission'
           label='变速箱'>
         </el-table-column>
         <el-table-column
-          prop='country'
+          prop='data.country'
           label='国家'>
         </el-table-column>
         <el-table-column
-          prop='produce'
+          prop='data.produce'
           label='生产方式'>
         </el-table-column>
         <el-table-column
-          prop='structure'
+          prop='data.structure'
           label='结构'>
         </el-table-column>
         <el-table-column
-          prop='seat'
+          prop='data.seat'
           label='座位'>
         </el-table-column>
         <el-table-column
-          prop='keyword'
+          prop='data.keyword'
           label='关键字'>
         </el-table-column>
         <el-table-column
-          prop='guidegprice'
+          prop='data.guidegprice'
           label='指导价格'>
         </el-table-column>
         <el-table-column
-          prop='gprice'
+          prop='data.gprice'
           label='参考价格'>
         </el-table-column>
         <el-table-column
-          prop='gprice'
-          label='参考价格'>
-        </el-table-column>
-        <el-table-column
-          prop='mtitle'
+          prop='data.mtitle'
           label='活动'>
         </el-table-column>
         <el-table-column

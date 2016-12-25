@@ -2,8 +2,8 @@
   <div>
     <div class="right-header">
       <el-breadcrumb>
-        <el-breadcrumb-item :to="{ path: 'details' }">商家列表</el-breadcrumb-item>
-        <el-breadcrumb-item :to="{ name: 'CarModels', query: { bid: $route.query.bid }}">车型</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: 'details' }">{{ bname }}</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ name: 'CarModels', query: { bid: $route.query.bid, bname: this.bname }}">{{ gname }}</el-breadcrumb-item>
         <el-breadcrumb-item>车辆</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
@@ -101,6 +101,8 @@ export default {
   data() {
     return {
       carInfo: [],
+      bname: '',
+      gname: '',
       pageSize: 0,
       pageNum: 0
     }
@@ -114,6 +116,9 @@ export default {
       let gid = query.gid
       let pageNum = num > 0 ? num : 1
       let reqURL = '/model/getall.action?gid=' + gid + '&page=' + pageNum
+
+      this.bname = query.bname
+      this.gname = query.gname
 
       this.axios.get(reqURL).then(response => {
         let data = response.data.data

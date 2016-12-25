@@ -30,20 +30,18 @@
         <el-form-item label='维度'>
           <el-input v-model="newStoreInfo.latitude"></el-input>
         </el-form-item>
-
-        <el-form-item label='主营车型
-'>
-          <el-input v-model="dialogAddStoreVisible.majorbusiness"></el-input>
+        <el-form-item label='主营车型'>
+          <el-input v-model="newStoreInfo.majorbusiness"></el-input>
         </el-form-item>
         <el-form-item label='活动'>
-          <el-input v-model="dialogAddStoreVisible.title1"></el-input>
+          <el-input v-model="newStoreInfo.title1"></el-input>
         </el-form-item>
         <el-form-item label='主图'>
-          <el-input v-model="dialogAddStoreVisible.bshowimage"></el-input>
+          <el-input v-model="newStoreInfo.bshowimage"></el-input>
         </el-form-item>
         <el-form-item label='热门'>
           <el-switch
-            v-model='newStoreInfo.isHot'
+            v-model='newStoreInfo.ishot'
             on-text='是'
             off-text='否'
             on-color="#13ce66"
@@ -91,8 +89,26 @@
         <el-table-column
           inline-template
           label='操作'
-          width='140'>
+          width='200'>
           <div>
+            <el-popover
+              ref='deleteConfirm'
+              placement="top"
+              width="150"
+              v-model="confirmDeletePopover">
+              <p>确定删除？</p>
+              <div style="text-align: right; margin: 0">
+                <el-button size="mini" type="text" @click="cancelDeleteInfo">取消</el-button>
+                <el-button type="primary" size="mini" @click="handleDeleteInfo($index, row, column)">确定</el-button>
+              </div>
+            </el-popover>
+            <el-button
+              size='small'
+              type="danger"
+              @click="row.confirmDeletePopover = true"
+              v-popover:deleteConfirm>
+              删除
+            </el-button>
             <el-button
               size='small'
               @click="handleEdit($index, row, column)">
@@ -107,10 +123,56 @@
         </el-table-column>
       </el-table>
     </div>
+    <div class="store-detils-edit">
+      <el-dialog title="商家详情" v-model='dialogStoreDetilsVisible' v-if="dialogStoreDetilsVisible">
+        <el-form label-width='75px'>
+          <el-form-item label='商家名'>
+            <el-input v-model='detailsStoreInfo.data.bname'></el-input>
+          </el-form-item>
+          <el-form-item label='地址'>
+            <el-input v-model='detailsStoreInfo.data.baddress'></el-input>
+          </el-form-item>
+          <el-form-item label='电话'>
+            <el-input v-model='detailsStoreInfo.data.bphone'></el-input>
+          </el-form-item>
+          <el-form-item label='姓名'>
+            <el-input v-model='detailsStoreInfo.data.uname'></el-input>
+          </el-form-item>
+          <el-form-item label='经度'>
+            <el-input v-model='detailsStoreInfo.data.longitude'></el-input>
+          </el-form-item>
+          <el-form-item label='维度'>
+            <el-input v-model='detailsStoreInfo.data.latitude'></el-input>
+          </el-form-item>
+          <el-form-item label='主营车型'>
+            <el-input v-model='detailsStoreInfo.data.majorbusiness'></el-input>
+          </el-form-item>
+          <el-form-item label='活动'>
+            <el-input v-model='detailsStoreInfo.data.title1'></el-input>
+          </el-form-item>
+          <el-form-item label='主图'>
+            <el-input v-model='detailsStoreInfo.data.bshowimage'></el-input>
+          </el-form-item>
+          <el-form-item label='热门'>
+            <el-switch
+              v-model='detailsStoreInfo.data.ishot'
+              on-text='是'
+              off-text='否'
+              on-color="#13ce66"
+              off-color="#ff4949">
+            </el-switch>
+          </el-form-item>
+        </el-form>
+        <div slot='footer'>
+          <el-button @click="submitStoreChange">修改</el-button>
+        </div>
+      </el-dialog>
+    </div>
     <div class="store-pagination">
       <el-pagination
         layout='total, prev, pager, next, jumper'
         @current-change="handleCurrentChange"
+        :current-page="currentPage"
         :page-size='pageSize'
         :total='pageNum'>
       </el-pagination>
@@ -123,6 +185,7 @@ export default {
   data() {
     return {
       storeInfo: [],
+      currentPage: 1,
       pageSize: 0,
       pageNum: 0,
       newStoreInfo: {
@@ -131,14 +194,17 @@ export default {
         baddress: '',
         bphone: '',
         uname: '',
-        isHot: false,
+        ishot: false,
         longitude: '',
         latitude: '',
         majorbusiness: '',
         title1: '',
         bshowImage: ''
       },
-      dialogAddStoreVisible: false
+      dialogAddStoreVisible: false,
+      dialogStoreDetilsVisible: false,
+      detailsStoreInfo: {},
+      confirmDeletePopover: false,
     }
   },
   created() {
@@ -166,7 +232,7 @@ export default {
         baddress: '',
         bphone: '',
         uname: '',
-        isHot: '',
+        ishot: false,
         longitude: '',
         latitude: '',
         majorbusiness: '',
@@ -174,11 +240,9 @@ export default {
         bshowImage: ''
       }
       this.newStoreInfo = storeInfo
-      console.log(this.newStoreInfo);
     },
     submitStoreInfo() {
       let that = this
-      let body =
 
       this.axios({
         url: '/business/add.action',
@@ -187,7 +251,18 @@ export default {
         headers: { 'Content-Type': 'application/x-www-form-urlencoded'}
       }).then(response => {
         let data = response.data
-        console.log(data);
+        if (data.status == 200) {
+          let lastPage = Math.floor(this.pageNum / this.pageSize) + 1;
+
+          if (this.pageNum % this.pageSize == 0) {
+            this.pageNum = this.pageNum + 1
+          }
+
+          this.currentPage = lastPage
+          this.dialogAddStoreVisible = false
+          this.initData(lastPage)
+          this.resetStoreInfo()
+        }
       })
     },
     dateFormatter(row) {
@@ -196,11 +271,81 @@ export default {
       let str = value.getFullYear() + blank + (value.getMonth() + 1) + blank + (value.getDate())
       return str
     },
+    cancelDeleteInfo() {
+      this.confirmDeletePopover = true
+      setTimeout(() => {
+        this.confirmDeletePopover = false
+      }, 0)
+    },
+    handleDeleteInfo($index, row, column) {
+      let bid = row.data.bid
+      let reqURL = '/business/delete.action?bid=' + bid
+
+      this.confirmDeletePopover = true
+      setTimeout(() => {
+        this.confirmDeletePopover = false
+      }, 0)
+
+      this.axios.get(reqURL).then(response => {
+        let data = response.data
+        if (data.status == 200) {
+          let currentPage
+          let pageXSize = this.currentPage * this.pageSize
+
+          if (pageXSize < this.pageNum) {
+            this.initData(this.currentPage)
+          }
+
+          if(pageXSize = this.pageNum) {
+            if (this.pageNum % this.pageSize == 1 && this.currentPage!= 1) {
+              this.initData(this.currentPage - 1)
+            } else {
+              this.initData(this.currentPage)
+            }
+          }
+        }
+      })
+    },
+    handleEdit(index, row, column) {
+      this.dialogStoreDetilsVisible = true;
+      let bimage = row.bimage
+      let data = row.data
+      let obj = {}
+
+      obj.bimage = bimage
+      obj.data = {}
+
+      for (let key in data) {
+        if (key != 'bdate') {
+          obj.data[key] = data[key]
+        }
+      }
+
+      this.detailsStoreInfo = obj
+    },
     handleModelEdit(index, row, column) {
-      this.$router.push( {name: 'CarModels', query: {bid: row.data.bid }} )
+      this.$router.push( {name: 'CarModels', query: {bid: row.data.bid, bname: row.data.bname}} )
     },
     handleCurrentChange(val) {
+      this.currentPage = val
       this.initData(val)
+    },
+    submitStoreChange() {
+      let data = this.detailsStoreInfo.data
+      console.log(data);
+
+      this.axios({
+        url: '/business/update.action',
+        method: 'post',
+        data: data,
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded'}
+      }).then(response => {
+        let data = response.data
+        if (data.status == 200) {
+          this.initData(this.currentPage)
+          this.dialogStoreDetilsVisible = false;
+        }
+      })
     }
   }
 }

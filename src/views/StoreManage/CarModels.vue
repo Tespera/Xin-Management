@@ -2,7 +2,7 @@
   <div>
     <div class="right-header">
       <el-breadcrumb>
-        <el-breadcrumb-item :to="{ path: 'details' }">商家列表</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: 'details' }">{{ bname }}</el-breadcrumb-item>
         <el-breadcrumb-item>车型</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
@@ -68,6 +68,7 @@ export default {
   data() {
     return {
       modelInfo: [],
+      bname: '',
       pageSize: 0,
       pageNum: 0
     }
@@ -81,6 +82,7 @@ export default {
       let bid = query.bid
       let pageNum = num > 0 ? num : 1
       let reqURL = '/goods/getall.action?bid=' + bid + '&page=' + pageNum
+      this.bname = query.bname
 
       this.axios.get(reqURL).then(response => {
         let data = response.data
@@ -100,7 +102,7 @@ export default {
       return str
     },
     handleCarEdit($index, row, column) {
-      this.$router.push({name: 'CarList', query: { gid: row.data.gid, bid: row.data.bid}})
+      this.$router.push({name: 'CarList', query: { gid: row.data.gid, bid: row.data.bid, bname: this.bname, gname: row.data.gname}})
     },
     handleCurrentChange(val) {
       this.initData(val)

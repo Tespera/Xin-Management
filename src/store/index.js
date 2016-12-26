@@ -8,6 +8,8 @@ Vue.use(Vuex)
 
 const state = {
   baseURL: 'http://172.16.120.212:8080',
+  baseImgURL: 'http://172.16.120.1'
+  // baseImgURL: 'http://172.16.120.65:8080/carshop'
 }
 
 const store = new Vuex.Store({

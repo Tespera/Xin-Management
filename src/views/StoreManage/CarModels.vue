@@ -3,19 +3,61 @@
     <div class="right-header">
       <el-breadcrumb>
         <el-breadcrumb-item :to="{ path: 'details' }">{{ bname }}</el-breadcrumb-item>
-        <el-breadcrumb-item>车型</el-breadcrumb-item>
+        <el-breadcrumb-item>车系</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
+    <div class="store-tooltip">
+      <el-button type='text' icon='plus' @click="dialogAddModelVisible = true"></el-button>
+    </div>
+    <el-dialog title="添加车系" v-model='dialogAddModelVisible'>
+      <el-form
+        :model="newModelInfo"
+        label-width="75px">
+        <el-form-item label='车系'>
+          <el-input v-model="newModelInfo.gname"></el-input>
+        </el-form-item>
+        <el-form-item label='活动'>
+          <el-input v-model="newModelInfo.title"></el-input>
+        </el-form-item>
+        <!-- <el-form-item label='最低价格'>
+          <el-input v-model="newModelInfo.minprice"></el-input>
+        </el-form-item>
+        <el-form-item label='最高价格'>
+          <el-input v-model="newModelInfo.maxprice"></el-input>
+        </el-form-item> -->
+        <el-form-item label='主图'>
+          <el-upload
+            :action="$store.state.baseURL + '/simage/upload.action'"
+            name='uploadFile'
+            type="drag"
+            :on-success="handleAddModelShowImg"
+            :thumbnail-mode="true">
+            <i class="el-icon-upload"></i>
+            <div class="el-dragger__text">将文件拖到此处，或<em>点击上传</em></div>
+            <!-- <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div> -->
+          </el-upload>
+        </el-form-item>
+        <el-form-item label='热门'>
+          <el-switch
+            v-model='newModelInfo.ishot'
+            on-text='是'
+            off-text='否'
+            on-color="#13ce66"
+            off-color="#ff4949">
+          </el-switch>
+        </el-form-item>
+      </el-form>
+      <div slot='footer'>
+        <el-button @click="resetModelInfo">重置</el-button>
+        <el-button @click="submitModelInfo">提交</el-button>
+      </div>
+    </el-dialog>
     <div class="store-table">
       <el-table
         :data='modelInfo'>
         <el-table-column
           prop='data.gname'
-          label='车型'>
-        </el-table-column>
-        <el-table-column
-          prop='data.bname'
-          label='商家'>
+          label='车系'>
         </el-table-column>
         <el-table-column
           prop='data.title'
@@ -36,8 +78,26 @@
         <el-table-column
           inline-template
           label='操作'
-          width='140'>
+          width='200'>
           <div>
+            <el-popover
+              ref='deleteConfirm'
+              placement="top"
+              width="150"
+              v-model="confirmDeletePopover">
+              <p>确定删除？</p>
+              <div style="text-align: right; margin: 0">
+                <el-button size="mini" type="text" @click="cancelDeleteInfo">取消</el-button>
+                <el-button type="primary" size="mini" @click="handleDeleteInfo($index, row, column)">确定</el-button>
+              </div>
+            </el-popover>
+            <el-button
+              size='small'
+              type='danger'
+              @click='confirmDeletePopover = true'
+              v-popover:deleteConfirm>
+              删除
+            </el-button>
             <el-button
               size='small'
               @click="handleEdit($index, row, column)">
@@ -46,16 +106,62 @@
             <el-button
               size='small'
               @click="handleCarEdit($index, row, column)">
-              车辆
+              车型
             </el-button>
           </div>
         </el-table-column>
       </el-table>
     </div>
+    <div class="store-detils-edit">
+      <el-dialog title="车系详情" v-model='dialogModelDetilsVisible' v-if="dialogModelDetilsVisible">
+        <el-form label-width='75px'>
+          <el-form-item label='车系'>
+            <el-input v-model='detailsModeslInfo.data.gname'></el-input>
+          </el-form-item>
+          <el-form-item label='活动'>
+            <el-input v-model='detailsModeslInfo.data.title'></el-input>
+          </el-form-item>
+          <!-- <el-form-item label='最低价格'>
+            <el-input v-model='detailsModeslInfo.data.minprice'></el-input>
+          </el-form-item>
+          <el-form-item label='最高价格'>
+            <el-input v-model='detailsModeslInfo.data.maxprice'></el-input>
+          </el-form-item> -->
+          <el-form-item label='主图'>
+            <el-input v-model='detailsModeslInfo.data.gshowimage'></el-input>
+            <el-upload
+              :action="$store.state.baseURL + '/update/image.action'"
+              type="drag"
+              name='uploadFile'
+              :data="{imageName: detailsModeslInfo.data.gshowimage}"
+              :on-success="handleChangeModelShowImg"
+              :thumbnail-mode="true"
+              :default-file-list="[{name: detailsModeslInfo.data.bshowimage, url: $store.state.baseImgURL + detailsModeslInfo.data.gshowimage }]">
+              <i class="el-icon-upload"></i>
+              <div class="el-dragger__text">将文件拖到此处，或<em>点击上传</em></div>
+              <!-- <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div> -->
+            </el-upload>
+          </el-form-item>
+          <el-form-item label='热门'>
+            <el-switch
+              v-model='detailsModeslInfo.data.ishot'
+              on-text='是'
+              off-text='否'
+              on-color="#13ce66"
+              off-color="#ff4949">
+            </el-switch>
+          </el-form-item>
+        </el-form>
+        <div slot='footer'>
+          <el-button @click="submitModelChange">修改</el-button>
+        </div>
+      </el-dialog>
+    </div>
     <div class="store-pagination">
       <el-pagination
         layout='total, prev, pager, next, jumper'
         @current-change="handleCurrentChange"
+        :current-page="currentPage"
         :page-size='pageSize'
         :total='pageNum'>
       </el-pagination>
@@ -69,8 +175,22 @@ export default {
     return {
       modelInfo: [],
       bname: '',
+      currentPage: 1,
       pageSize: 0,
-      pageNum: 0
+      pageNum: 0,
+      newModelInfo: {
+        gname: '',
+        title: '',
+        minprice: '',
+        maxprice: '',
+        gshowimage: '',
+        bid: this.$route.query.bid,
+        ishot: false
+      },
+      detailsModeslInfo: {},
+      dialogAddModelVisible: false,
+      dialogModelDetilsVisible: false,
+      confirmDeletePopover: false
     }
   },
   created() {
@@ -95,6 +215,41 @@ export default {
         this.modelInfo = modeInfo
       })
     },
+    resetModelInfo() {
+      let modelInfo = {
+        gname: '',
+        title: '',
+        minprice: '',
+        maxprice: '',
+        gshowimage: '',
+        bid: this.$route.query.bid,
+        ishot: false
+      }
+      this.newModelInfo = modelInfo
+    },
+    submitModelInfo() {
+      this.axios({
+        url: '/goods/add.action',
+        method: 'post',
+        data: this.newModelInfo,
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded'}
+      }).then(response => {
+        let data = response.data
+        console.log(data);
+        if (data.status == 200) {
+          let lastPage = Math.floor(this.pageNum / this.pageSize) + 1;
+
+          if (this.pageNum % this.pageSize == 0) {
+            this.pageNum = this.pageNum + 1
+          }
+
+          this.currentPage = lastPage
+          this.dialogAddModelVisible = false
+          this.initData(lastPage)
+          this.resetModelInfo()
+        }
+      })
+    },
     dateFormatter(row) {
       let value = new Date(row.data.gdate)
       let blank = '/'
@@ -105,7 +260,82 @@ export default {
       this.$router.push({name: 'CarList', query: { gid: row.data.gid, bid: row.data.bid, bname: this.bname, gname: row.data.gname}})
     },
     handleCurrentChange(val) {
+      this.currentPage = val
       this.initData(val)
+    },
+    cancelDeleteInfo() {
+      this.confirmDeletePopover = true
+      setTimeout(() => {
+        this.confirmDeletePopover = false
+      }, 0)
+    },
+    handleDeleteInfo($index, row, column) {
+      let gid = row.data.gid
+      let reqURL = '/goods/delete.action?gid=' + gid
+
+      this.confirmDeletePopover = true
+      setTimeout(() => {
+        this.confirmDeletePopover = false
+      }, 0)
+
+      this.axios.get(reqURL).then(response => {
+        let data = response.data
+        if (data.status == 200) {
+          let currentPage
+          let pageXSize = this.currentPage * this.pageSize
+
+          if (pageXSize < this.pageNum) {
+            this.initData(this.currentPage)
+          }
+
+          if(pageXSize = this.pageNum) {
+            if (this.pageNum % this.pageSize == 1 && this.currentPage!= 1) {
+              this.initData(this.currentPage - 1)
+            } else {
+              this.initData(this.currentPage)
+            }
+          }
+        }
+      })
+    },
+    handleEdit(index, row, column) {
+      this.dialogModelDetilsVisible = true;
+      let bimage = row.bimage
+      let data = row.data
+      let obj = {}
+
+      obj.bimage = bimage
+      obj.data = {}
+
+      for (let key in data) {
+        if (key != 'gdate') {
+          obj.data[key] = data[key]
+        }
+      }
+
+      this.detailsModeslInfo = obj
+    },
+    submitModelChange() {
+      let data = this.detailsModeslInfo.data
+
+      this.axios({
+        url: '/goods/update.action',
+        method: 'post',
+        data: data,
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded'}
+      }).then(response => {
+        let data = response.data
+        if (data.status == 200) {
+          this.initData(this.currentPage)
+          this.dialogModelDetilsVisible = false;
+        }
+      })
+    },
+    handleAddModelShowImg(response, file, fileList) {
+      this.newModelInfo.gshowimage = response.url
+    },
+    handleChangeModelShowImg(response, file, fileList) {
+      this.detailsModeslInfo.data.gshowimage = response.url
     }
   }
 }

@@ -30,14 +30,23 @@
         <el-form-item label='维度'>
           <el-input v-model="newStoreInfo.latitude"></el-input>
         </el-form-item>
-        <el-form-item label='主营车型'>
+        <el-form-item label='主营车系'>
           <el-input v-model="newStoreInfo.majorbusiness"></el-input>
         </el-form-item>
         <el-form-item label='活动'>
           <el-input v-model="newStoreInfo.title1"></el-input>
         </el-form-item>
         <el-form-item label='主图'>
-          <el-input v-model="newStoreInfo.bshowimage"></el-input>
+          <el-upload
+            :action="$store.state.baseURL + '/simage/upload.action'"
+            name='uploadFile'
+            type="drag"
+            :on-success="handleAddStoreShowImg"
+            :thumbnail-mode="true">
+            <i class="el-icon-upload"></i>
+            <div class="el-dragger__text">将文件拖到此处，或<em>点击上传</em></div>
+            <!-- <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div> -->
+          </el-upload>
         </el-form-item>
         <el-form-item label='热门'>
           <el-switch
@@ -75,7 +84,7 @@
         </el-table-column>
         <el-table-column
           prop='data.majorbusiness'
-          label='主营车型'>
+          label='主营车系'>
         </el-table-column>
         <el-table-column
           prop='data.title1'
@@ -105,7 +114,7 @@
             <el-button
               size='small'
               type="danger"
-              @click="row.confirmDeletePopover = true"
+              @click="confirmDeletePopover = true"
               v-popover:deleteConfirm>
               删除
             </el-button>
@@ -117,7 +126,7 @@
             <el-button
               size='small'
               @click="handleModelEdit($index, row, column)">
-              车型
+              车系
             </el-button>
           </div>
         </el-table-column>
@@ -144,14 +153,25 @@
           <el-form-item label='维度'>
             <el-input v-model='detailsStoreInfo.data.latitude'></el-input>
           </el-form-item>
-          <el-form-item label='主营车型'>
+          <el-form-item label='主营车系'>
             <el-input v-model='detailsStoreInfo.data.majorbusiness'></el-input>
           </el-form-item>
           <el-form-item label='活动'>
             <el-input v-model='detailsStoreInfo.data.title1'></el-input>
           </el-form-item>
           <el-form-item label='主图'>
-            <el-input v-model='detailsStoreInfo.data.bshowimage'></el-input>
+            <el-upload
+              :action="$store.state.baseURL + '/update/image.action'"
+              type="drag"
+              name='uploadFile'
+              :data="{imageName: detailsStoreInfo.data.bshowimage}"
+              :on-success="handleChangeStoreShowImg"
+              :thumbnail-mode="true"
+              :default-file-list="[{name: detailsStoreInfo.data.bshowimage, url: $store.state.baseImgURL + detailsStoreInfo.data.bshowimage }]">
+              <i class="el-icon-upload"></i>
+              <div class="el-dragger__text">将文件拖到此处，或<em>点击上传</em></div>
+              <!-- <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div> -->
+            </el-upload>
           </el-form-item>
           <el-form-item label='热门'>
             <el-switch
@@ -199,12 +219,15 @@ export default {
         latitude: '',
         majorbusiness: '',
         title1: '',
-        bshowImage: ''
+        bshowimage: ''
       },
       dialogAddStoreVisible: false,
       dialogStoreDetilsVisible: false,
       detailsStoreInfo: {},
       confirmDeletePopover: false,
+      uploadHeader: {
+        'Content-Type': 'multipart/form-data; boundary=fuckReaquestHeader'
+      }
     }
   },
   created() {
@@ -237,13 +260,11 @@ export default {
         latitude: '',
         majorbusiness: '',
         title1: '',
-        bshowImage: ''
+        bshowimage: ''
       }
       this.newStoreInfo = storeInfo
     },
     submitStoreInfo() {
-      let that = this
-
       this.axios({
         url: '/business/add.action',
         method: 'post',
@@ -332,7 +353,6 @@ export default {
     },
     submitStoreChange() {
       let data = this.detailsStoreInfo.data
-      console.log(data);
 
       this.axios({
         url: '/business/update.action',
@@ -346,6 +366,14 @@ export default {
           this.dialogStoreDetilsVisible = false;
         }
       })
+    },
+    handleAddStoreShowImg(response, file, fileList) {
+      this.newStoreInfo.bshowimage = response.url
+    },
+    handleChangeStoreShowImg(response, file, fileList) {
+      console.log(response);
+      this.detailsStoreInfo.data.bshowimage = response.url
+      console.log(this.detailsStoreInfo);
     }
   }
 }

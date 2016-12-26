@@ -8,7 +8,7 @@
       <el-menu-item
         index='2'
         :route="{ name: 'StoreManage'}">
-        <i class="el-icon-document"></i>查询
+        <i class="el-icon-document"></i>4S店管理
       </el-menu-item>
     </el-menu>
   </div>

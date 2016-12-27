@@ -8,7 +8,10 @@
     <div class="store-tooltip">
       <el-button type='text' icon='plus' @click="dialogAddStoreVisible = true"></el-button>
     </div>
-    <el-dialog title="添加商家" v-model='dialogAddStoreVisible'>
+    <el-dialog
+      title="添加商家"
+      top='4%'
+      v-model='dialogAddStoreVisible'>
       <el-form
         :model="newStoreInfo"
         label-width="75px">
@@ -33,7 +36,7 @@
         <el-form-item label='主营车系'>
           <el-input v-model="newStoreInfo.majorbusiness"></el-input>
         </el-form-item>
-        <el-form-item label='活动'>
+        <el-form-item label='商家活动'>
           <el-input v-model="newStoreInfo.title1"></el-input>
         </el-form-item>
         <el-form-item label='主图'>
@@ -47,6 +50,15 @@
             <div class="el-dragger__text">将文件拖到此处，或<em>点击上传</em></div>
             <!-- <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div> -->
           </el-upload>
+        </el-form-item>
+        <el-form-item label='平台活动'>
+          <el-switch
+            v-model='newStoreInfo.isactivity'
+            on-text='是'
+            off-text='否'
+            on-color="#13ce66"
+            off-color="#ff4949">
+          </el-switch>
         </el-form-item>
         <el-form-item label='热门'>
           <el-switch
@@ -88,7 +100,7 @@
         </el-table-column>
         <el-table-column
           prop='data.title1'
-          label='活动'>
+          label='商家活动'>
         </el-table-column>
         <el-table-column
           prop='data.bdate'
@@ -98,7 +110,7 @@
         <el-table-column
           inline-template
           label='操作'
-          width='200'>
+          width='260'>
           <div>
             <el-popover
               ref='deleteConfirm'
@@ -125,6 +137,11 @@
             </el-button>
             <el-button
               size='small'
+              @click="handleCarouseEdit($index, row, column)">
+              轮播
+            </el-button>
+            <el-button
+              size='small'
               @click="handleModelEdit($index, row, column)">
               车系
             </el-button>
@@ -133,7 +150,11 @@
       </el-table>
     </div>
     <div class="store-detils-edit">
-      <el-dialog title="商家详情" v-model='dialogStoreDetilsVisible' v-if="dialogStoreDetilsVisible">
+      <el-dialog
+        title="商家详情"
+        top='4%'
+        v-model='dialogStoreDetilsVisible'
+        v-if="dialogStoreDetilsVisible">
         <el-form label-width='75px'>
           <el-form-item label='商家名'>
             <el-input v-model='detailsStoreInfo.data.bname'></el-input>
@@ -156,7 +177,7 @@
           <el-form-item label='主营车系'>
             <el-input v-model='detailsStoreInfo.data.majorbusiness'></el-input>
           </el-form-item>
-          <el-form-item label='活动'>
+          <el-form-item label='商家活动'>
             <el-input v-model='detailsStoreInfo.data.title1'></el-input>
           </el-form-item>
           <el-form-item label='主图'>
@@ -173,6 +194,15 @@
               <!-- <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div> -->
             </el-upload>
           </el-form-item>
+          <el-form-item label='平台活动'>
+            <el-switch
+              v-model='detailsStoreInfo.data.isactivity'
+              on-text='是'
+              off-text='否'
+              on-color="#13ce66"
+              off-color="#ff4949">
+            </el-switch>
+          </el-form-item>
           <el-form-item label='热门'>
             <el-switch
               v-model='detailsStoreInfo.data.ishot'
@@ -186,6 +216,40 @@
         <div slot='footer'>
           <el-button @click="submitStoreChange">修改</el-button>
         </div>
+      </el-dialog>
+    </div>
+    <div class="carouse-edit">
+      <el-dialog
+        size='full'
+        title='轮播图管理'
+        v-model="dialogCarouseVisible"
+        v-if="dialogCarouseVisible">
+        <template
+          v-for="item in storeInfo[currentCarouseImages.index].bImage">
+          <el-upload
+            type="drag"
+            name="uploadFile"
+            :action="$store.state.baseURL + '/images/upload.action'"
+            :on-success='uploadCarouseSuccess'
+            :default-file-list="[{name: item.image, url: $store.state.baseImgURL + item.image}]"
+            :data="{id: currentCarouseImages.bid, idName: 'bid', iid: item.iid}"
+            :thumbnail-mode="true">
+            <i class="el-icon-upload"></i>
+            <div class="el-dragger__text">将文件拖到此处，或<em>点击上传</em></div>
+            <!-- <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div> -->
+          </el-upload>
+        </template>
+        <el-upload
+          type="drag"
+          name="uploadFile"
+          :action="$store.state.baseURL + '/images/upload.action'"
+          :data="{id: currentCarouseImages.bid, idName: 'bid', iid: '-1'}"
+          :on-success='uploadCarouseSuccess'
+          :thumbnail-mode="true">
+          <i class="el-icon-upload"></i>
+          <div class="el-dragger__text">将文件拖到此处，或<em>点击上传</em></div>
+          <!-- <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div> -->
+        </el-upload>
       </el-dialog>
     </div>
     <div class="store-pagination">
@@ -219,19 +283,27 @@ export default {
         latitude: '',
         majorbusiness: '',
         title1: '',
-        bshowimage: ''
+        bshowimage: '',
+        isactivity: false
       },
       dialogAddStoreVisible: false,
       dialogStoreDetilsVisible: false,
+      dialogCarouseVisible: false,
       detailsStoreInfo: {},
       confirmDeletePopover: false,
       uploadHeader: {
         'Content-Type': 'multipart/form-data; boundary=fuckReaquestHeader'
-      }
+      },
+      currentCarouseImages: {}
     }
   },
   created() {
     this.initData()
+  },
+  watch: {
+    dialogCarouseVisible(val) {
+      console.log(val);
+    }
   },
   methods: {
     initData(page) {
@@ -344,6 +416,11 @@ export default {
 
       this.detailsStoreInfo = obj
     },
+    handleCarouseEdit(index, row, column) {
+      this.dialogCarouseVisible = true
+      this.currentCarouseImages.bid = row.data.bid
+      this.currentCarouseImages.index = index
+    },
     handleModelEdit(index, row, column) {
       this.$router.push( {name: 'CarModels', query: {bid: row.data.bid, bname: row.data.bname}} )
     },
@@ -371,9 +448,10 @@ export default {
       this.newStoreInfo.bshowimage = response.url
     },
     handleChangeStoreShowImg(response, file, fileList) {
-      console.log(response);
       this.detailsStoreInfo.data.bshowimage = response.url
-      console.log(this.detailsStoreInfo);
+    },
+    uploadCarouseSuccess(response, file, fileList) {
+      this.initData(this.currentPage)
     }
   }
 }

@@ -9,7 +9,9 @@
     <div class="store-tooltip">
       <el-button type='text' icon='plus' @click="dialogAddModelVisible = true"></el-button>
     </div>
-    <el-dialog title="添加车系" v-model='dialogAddModelVisible'>
+    <el-dialog
+      title="添加车系"
+      v-model='dialogAddModelVisible'>
       <el-form
         :model="newModelInfo"
         label-width="75px">
@@ -78,7 +80,7 @@
         <el-table-column
           inline-template
           label='操作'
-          width='200'>
+          width='260'>
           <div>
             <el-popover
               ref='deleteConfirm'
@@ -105,6 +107,11 @@
             </el-button>
             <el-button
               size='small'
+              @click="handleCarouseEdit($index, row, column)">
+              轮播
+            </el-button>
+            <el-button
+              size='small'
               @click="handleCarEdit($index, row, column)">
               车型
             </el-button>
@@ -128,7 +135,6 @@
             <el-input v-model='detailsModeslInfo.data.maxprice'></el-input>
           </el-form-item> -->
           <el-form-item label='主图'>
-            <el-input v-model='detailsModeslInfo.data.gshowimage'></el-input>
             <el-upload
               :action="$store.state.baseURL + '/update/image.action'"
               type="drag"
@@ -155,6 +161,40 @@
         <div slot='footer'>
           <el-button @click="submitModelChange">修改</el-button>
         </div>
+      </el-dialog>
+    </div>
+    <div class="carouse-edit">
+      <el-dialog
+        size='full'
+        title='轮播图管理'
+        v-model="dialogCarouseVisible"
+        v-if="dialogCarouseVisible">
+        <template
+          v-for="item in modelInfo[currentCarouseImages.index].bImage">
+          <el-upload
+            type="drag"
+            name="uploadFile"
+            :action="$store.state.baseURL + '/images/upload.action'"
+            :on-success='uploadCarouseSuccess'
+            :default-file-list="[{name: item.image, url: $store.state.baseImgURL + item.image}]"
+            :data="{id: currentCarouseImages.gid, idName: 'gid', iid: item.iid}"
+            :thumbnail-mode="true">
+            <i class="el-icon-upload"></i>
+            <div class="el-dragger__text">将文件拖到此处，或<em>点击上传</em></div>
+            <!-- <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div> -->
+          </el-upload>
+        </template>
+        <el-upload
+          type="drag"
+          name="uploadFile"
+          :action="$store.state.baseURL + '/images/upload.action'"
+          :data="{id: currentCarouseImages.gid, idName: 'gid', iid: '-1'}"
+          :on-success='uploadCarouseSuccess'
+          :thumbnail-mode="true">
+          <i class="el-icon-upload"></i>
+          <div class="el-dragger__text">将文件拖到此处，或<em>点击上传</em></div>
+          <!-- <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div> -->
+        </el-upload>
       </el-dialog>
     </div>
     <div class="store-pagination">
@@ -188,8 +228,10 @@ export default {
         ishot: false
       },
       detailsModeslInfo: {},
+      currentCarouseImages: {},
       dialogAddModelVisible: false,
       dialogModelDetilsVisible: false,
+      dialogCarouseVisible: false,
       confirmDeletePopover: false
     }
   },
@@ -331,11 +373,19 @@ export default {
         }
       })
     },
+    handleCarouseEdit(index, row, column) {
+      this.dialogCarouseVisible = true
+      this.currentCarouseImages.gid = row.data.gid
+      this.currentCarouseImages.index = index
+    },
     handleAddModelShowImg(response, file, fileList) {
       this.newModelInfo.gshowimage = response.url
     },
     handleChangeModelShowImg(response, file, fileList) {
       this.detailsModeslInfo.data.gshowimage = response.url
+    },
+    uploadCarouseSuccess(response, file, fileList) {
+      this.initData(this.currentPage)
     }
   }
 }

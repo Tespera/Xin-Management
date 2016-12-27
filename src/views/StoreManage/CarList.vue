@@ -10,7 +10,10 @@
     <div class="store-tooltip">
       <el-button type='text' icon='plus' @click="dialogAddCarVisible = true"></el-button>
     </div>
-    <el-dialog title="添加车型" v-model='dialogAddCarVisible'>
+    <el-dialog
+      title="添加车型"
+      top='-1%'
+      v-model='dialogAddCarVisible'>
       <el-form
         :model="newCarInfo"
         label-width="75px">
@@ -145,7 +148,7 @@
         <el-table-column
           inline-template
           label='操作'
-          width='140'>
+          width='200'>
           <div>
             <el-popover
               ref='deleteConfirm'
@@ -170,12 +173,21 @@
               @click="handleEdit($index, row, column)">
               详情
             </el-button>
+            <el-button
+              size='small'
+              @click="handleCarouseEdit($index, row, column)">
+              轮播
+            </el-button>
           </div>
         </el-table-column>
       </el-table>
     </div>
     <div class="store-detils-edit">
-      <el-dialog title="车型详情" v-model='dialogCarListDetilsVisible' v-if="dialogCarListDetilsVisible">
+      <el-dialog
+        title="车型详情"
+        top='-1%'
+        v-model='dialogCarListDetilsVisible'
+        v-if="dialogCarListDetilsVisible">
         <el-form label-width='75px'>
           <el-form-item label='车名'>
             <el-input v-model='datailsCarListInfo.data.mname'></el-input>
@@ -248,6 +260,40 @@
         </div>
       </el-dialog>
     </div>
+    <div class="carouse-edit">
+      <el-dialog
+        size='full'
+        title='轮播图管理'
+        v-model="dialogCarouseVisible"
+        v-if="dialogCarouseVisible">
+        <template
+          v-for="item in carInfo[currentCarouseImages.index].bImage">
+          <el-upload
+            type="drag"
+            name="uploadFile"
+            :action="$store.state.baseURL + '/images/upload.action'"
+            :on-success='uploadCarouseSuccess'
+            :default-file-list="[{name: item.image, url: $store.state.baseImgURL + item.image}]"
+            :data="{id: currentCarouseImages.mid, idName: 'mid', iid: item.iid}"
+            :thumbnail-mode="true">
+            <i class="el-icon-upload"></i>
+            <div class="el-dragger__text">将文件拖到此处，或<em>点击上传</em></div>
+            <!-- <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div> -->
+          </el-upload>
+        </template>
+        <el-upload
+          type="drag"
+          name="uploadFile"
+          :action="$store.state.baseURL + '/images/upload.action'"
+          :data="{id: currentCarouseImages.mid, idName: 'mid', iid: '-1'}"
+          :on-success='uploadCarouseSuccess'
+          :thumbnail-mode="true">
+          <i class="el-icon-upload"></i>
+          <div class="el-dragger__text">将文件拖到此处，或<em>点击上传</em></div>
+          <!-- <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div> -->
+        </el-upload>
+      </el-dialog>
+    </div>
     <div class="store-pagination">
       <el-pagination
         layout='total, prev, pager, next, jumper'
@@ -290,6 +336,8 @@ export default {
         gid: this.$route.query.gid
       },
       datailsCarListInfo: {},
+      currentCarouseImages: {},
+      dialogCarouseVisible: false,
       confirmDeletePopover: false,
       dialogAddCarVisible: false,
       dialogCarListDetilsVisible: false,
@@ -440,6 +488,14 @@ export default {
     },
     handleChangeCarShowImg(response, file, fileList) {
       this.datailsCarListInfo.data.mshowimage = response.url
+    },
+    handleCarouseEdit(index, row, column) {
+      this.dialogCarouseVisible = true
+      this.currentCarouseImages.mid = row.data.mid
+      this.currentCarouseImages.index = index
+    },
+    uploadCarouseSuccess(response, file, fileList) {
+      this.initData(this.currentPage)
     }
   }
 }

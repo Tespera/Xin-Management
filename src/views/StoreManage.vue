@@ -59,6 +59,20 @@ export default {
   border-left: 1px solid #e0e6ed;
 }
 
+.store-manage .carouse-edit .el-dialog__body{
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.store-manage .carouse-edit .el-upload {
+  margin: 0 5px 6px;
+  /*display: inline-block;*/
+}
+
+.store-manage .carouse-edit .el-upload:last-of-type {
+  margin-bottom: 0;
+}
+
 .store-manage .store-table {
 
 }

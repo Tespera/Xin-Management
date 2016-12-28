@@ -61,6 +61,7 @@
         </el-form-item>
         <el-form-item label='主图'>
           <el-upload
+            v-if="dialogAddCarVisible"
             :action="$store.state.baseURL + '/simage/upload.action'"
             name='uploadFile'
             type="drag"
@@ -148,7 +149,7 @@
         <el-table-column
           inline-template
           label='操作'
-          width='200'>
+          width='260'>
           <div>
             <el-popover
               ref='deleteConfirm'
@@ -177,6 +178,11 @@
               size='small'
               @click="handleCarouseEdit($index, row, column)">
               轮播
+            </el-button>
+            <el-button
+              size='small'
+              @click="handleConfigEdit($index, row, column)">
+              配置
             </el-button>
           </div>
         </el-table-column>
@@ -294,6 +300,23 @@
         </el-upload>
       </el-dialog>
     </div>
+    <div class="confige-edit">
+      <el-dialog
+        title="上传配置表"
+        size='thiny'
+        v-model='dialogConfigVisible'>
+        <el-upload
+          type="drag"
+          name='execlFile'
+          :data='{mid: this.currentConfigInfo.mid }'
+          :action="$store.state.baseURL + '/execl/upload.action'"
+          :on-success="handleConfigSuccess">
+          <i class="el-icon-upload"></i>
+          <div class="el-dragger__text">将文件拖到此处，或<em>点击上传</em></div>
+          <!-- <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div> -->
+        </el-upload>
+      </el-dialog>
+    </div>
     <div class="store-pagination">
       <el-pagination
         layout='total, prev, pager, next, jumper'
@@ -337,10 +360,12 @@ export default {
       },
       datailsCarListInfo: {},
       currentCarouseImages: {},
+      currentConfigInfo: {},
       dialogCarouseVisible: false,
       confirmDeletePopover: false,
       dialogAddCarVisible: false,
-      dialogCarListDetilsVisible: false,
+      dialogConfigVisible: false,
+      dialogCarListDetilsVisible: false
     }
   },
   created() {
@@ -493,6 +518,17 @@ export default {
       this.dialogCarouseVisible = true
       this.currentCarouseImages.mid = row.data.mid
       this.currentCarouseImages.index = index
+    },
+    handleConfigEdit(index, row, column) {
+      this.dialogConfigVisible = true
+      this.currentConfigInfo.mid = row.data.mid
+    },
+    handleConfigSuccess(response, file, fileList) {
+      this.dialogConfigVisible = false
+      this.$message({
+        message: '配置表上传成功',
+        type: 'success'
+      });
     },
     uploadCarouseSuccess(response, file, fileList) {
       this.initData(this.currentPage)

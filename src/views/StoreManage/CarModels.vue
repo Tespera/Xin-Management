@@ -29,6 +29,7 @@
         </el-form-item> -->
         <el-form-item label='主图'>
           <el-upload
+            v-if="dialogAddModelVisible"
             :action="$store.state.baseURL + '/simage/upload.action'"
             name='uploadFile'
             type="drag"

@@ -1,5 +1,7 @@
 import Container from './views/Container.vue'
 
+import Login from './components/Login.vue'
+
 import StoreManage from './views/StoreManage.vue'
 import StoreDetils from './views/StoreManage/StoreDetils.vue'
 import CarModels from './views/StoreManage/CarModels.vue'
@@ -10,6 +12,11 @@ const routes = [
     path: '/',
     component: Container,
     children: [
+      {
+        path: 'login',
+        name: 'login',
+        component: Login,
+      },
       {
         path: 'stores',
         name: 'StoreManage',

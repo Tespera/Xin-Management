@@ -30,7 +30,7 @@
         <el-form-item label='经度'>
           <el-input v-model="newStoreInfo.longitude"></el-input>
         </el-form-item>
-        <el-form-item label='维度'>
+        <el-form-item label='纬度'>
           <el-input v-model="newStoreInfo.latitude"></el-input>
         </el-form-item>
         <el-form-item label='主营车系'>
@@ -41,6 +41,7 @@
         </el-form-item>
         <el-form-item label='主图'>
           <el-upload
+            v-if="dialogAddStoreVisible"
             :action="$store.state.baseURL + '/simage/upload.action'"
             name='uploadFile'
             type="drag"
@@ -171,7 +172,7 @@
           <el-form-item label='经度'>
             <el-input v-model='detailsStoreInfo.data.longitude'></el-input>
           </el-form-item>
-          <el-form-item label='维度'>
+          <el-form-item label='纬度'>
             <el-input v-model='detailsStoreInfo.data.latitude'></el-input>
           </el-form-item>
           <el-form-item label='主营车系'>
@@ -332,7 +333,8 @@ export default {
         latitude: '',
         majorbusiness: '',
         title1: '',
-        bshowimage: ''
+        bshowimage: '',
+        isactivity: false
       }
       this.newStoreInfo = storeInfo
     },

@@ -301,11 +301,6 @@ export default {
   created() {
     this.initData()
   },
-  watch: {
-    dialogCarouseVisible(val) {
-      console.log(val);
-    }
-  },
   methods: {
     initData(page) {
       let pageNum = page > 0 ? page : 1

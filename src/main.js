@@ -43,11 +43,18 @@ new Vue({
 
 let indexScrollTop = 0;
 router.beforeEach((route, redirect, next) => {
+  console.log(route, redirect,);
   if (route.path !== '/') {
     indexScrollTop = document.body.scrollTop;
   }
-  document.title = route.meta.title || document.title;
-  next();
+
+  if(route.path !== '/login' && !store.state.logged) {
+    next({path: '/login', query: {redirect: route.fullPath}})
+  } else {
+    next();
+  }
+
+  // document.title = route.meta.title || document.title;
 });
 
 router.afterEach(route => {

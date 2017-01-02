@@ -278,7 +278,6 @@ export default {
         headers: { 'Content-Type': 'application/x-www-form-urlencoded'}
       }).then(response => {
         let data = response.data
-        console.log(data);
         if (data.status == 200) {
           let lastPage = Math.floor(this.pageNum / this.pageSize) + 1;
 

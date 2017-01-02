@@ -422,7 +422,6 @@ export default {
         headers: { 'Content-Type': 'application/x-www-form-urlencoded'}
       }).then(response => {
         let data = response.data
-        console.log(data);
         if (data.status == 200) {
           let lastPage = Math.floor(this.pageNum / this.pageSize) + 1;
 
@@ -477,7 +476,6 @@ export default {
       })
     },
     handleEdit(index, row, column) {
-      console.log(row);
       this.dialogCarListDetilsVisible = true
       let bimage = row.bimage
       let data = row.data

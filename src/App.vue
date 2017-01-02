@@ -4,12 +4,24 @@
 
 <script>
 import Nav from './components/Nav.vue'
+import Cookies from 'js-cookie'
 
 export default {
   name: 'app',
   data () {
     return {
 
+    }
+  },
+  beforeCreate() {
+    let logged = Cookies.get('logged')
+    
+    if(!!logged) {
+      this.$store.commit('changeLoggedState', logged)
+    }
+
+    if(this.$route.path !== '/login' && !this.$store.state.logged) {
+      this.$router.push({path: '/login', query: {redirect: this.$route.fullPath}})
     }
   }
 }

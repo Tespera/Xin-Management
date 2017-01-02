@@ -3,7 +3,7 @@
     <el-row>
       <el-col
         :span='4'>
-        <left-nav></left-nav>
+        <left-nav v-if="this.$store.state.logged"></left-nav>
       </el-col>
       <el-col
         :span='20'>

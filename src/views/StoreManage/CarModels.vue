@@ -177,7 +177,8 @@
             name="uploadFile"
             :action="$store.state.baseURL + '/images/upload.action'"
             :on-success='uploadCarouseSuccess'
-            :default-file-list="[{name: item.image, url: $store.state.baseImgURL + item.image}]"
+            :default-file-list="[{name: item.image, url: $store.state.baseImgURL + item.image, iid: item.iid}]"
+            :on-remove='removeCarouse'
             :data="{id: currentCarouseImages.gid, idName: 'gid', iid: item.iid}"
             :thumbnail-mode="true">
             <i class="el-icon-upload"></i>
@@ -386,6 +387,18 @@ export default {
     },
     uploadCarouseSuccess(response, file, fileList) {
       this.initData(this.currentPage)
+    },
+    removeCarouse(file) {
+      let reqURL = '/images/delete.action'
+      let data = {
+        iid: file.iid
+      }
+      this.axios.post(reqURL, data, {
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded'}
+      }).then(response => {
+        let data = response.data
+        this.initData(this.currentPage)
+      })
     }
   }
 }

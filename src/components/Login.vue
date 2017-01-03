@@ -46,7 +46,7 @@ export default {
     handleSubmit() {
       console.log(this.$route);
       let redirect = this.$route.query.redirect
-      if(this.loginData.account == 'test' && this.loginData.pass == 'test123') {
+      if(this.loginData.account == 'xinba' && this.loginData.pass == 'xinba2017') {
         this.$refs.loginForm.resetFields()
         this.$store.commit('changeLoggedState', true)
 

@@ -7,10 +7,8 @@ import * as mutations from './mutations'
 Vue.use(Vuex)
 
 const state = {
-  baseURL: 'http://xuzi520.cn:8080',
-  baseImgURL: 'http://xuzi520.cn:8080',
-  // baseURL: '',
-  // baseImgURL: ''
+  baseURL: '',
+  baseImgURL: '',
   // baseURL: 'http://172.16.120.212:8080',
   // baseImgURL: 'http://59.110.5.105',
   // baseImgURL: 'http://172.16.120.1'

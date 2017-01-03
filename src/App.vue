@@ -15,7 +15,7 @@ export default {
   },
   beforeCreate() {
     let logged = Cookies.get('logged')
-    
+
     if(!!logged) {
       this.$store.commit('changeLoggedState', logged)
     }

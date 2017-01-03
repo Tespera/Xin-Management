@@ -1,7 +1,9 @@
 <template lang="html">
   <div>
-    <el-row>
+    <el-row
+      type='flex'>
       <el-col
+        class="left-nav-col"
         :span='4'>
         <left-nav v-if="this.$store.state.logged"></left-nav>
       </el-col>
@@ -27,5 +29,10 @@ export default {
 .right-main {
   background-color: blue;
   height: 30px;
+}
+
+.left-nav-col {
+  align-items: stretch;
+  background-color: #eff2f7;
 }
 </style>

@@ -21,31 +21,76 @@
           <el-input v-model="newCarInfo.mname"></el-input>
         </el-form-item>
         <el-form-item label='等级'>
-          <el-input v-model="newCarInfo.level"></el-input>
+          <el-radio-group v-model="newCarInfo.level">
+            <el-radio-button
+              v-for="item in configInfo.level"
+              :label="item">
+            </el-radio-button>
+          </el-radio-group>
         </el-form-item>
         <el-form-item label='排量'>
-          <el-input v-model="newCarInfo.output"></el-input>
+          <el-radio-group v-model="newCarInfo.output">
+            <el-radio-button
+              v-for="item in configInfo.output"
+              :label="item">
+            </el-radio-button>
+          </el-radio-group>
         </el-form-item>
         <el-form-item label='驱动'>
-          <el-input v-model="newCarInfo.drive"></el-input>
+          <el-radio-group v-model="newCarInfo.drive">
+            <el-radio-button
+              v-for="item in configInfo.drive"
+              :label="item">
+            </el-radio-button>
+          </el-radio-group>
         </el-form-item>
         <el-form-item label='燃料'>
-          <el-input v-model="newCarInfo.fuel"></el-input>
+          <el-radio-group v-model="newCarInfo.fuel">
+            <el-radio-button
+              v-for="item in configInfo.fuel"
+              :label="item">
+            </el-radio-button>
+          </el-radio-group>
         </el-form-item>
         <el-form-item label='变速箱'>
-          <el-input v-model="newCarInfo.transmission"></el-input>
+          <el-radio-group v-model="newCarInfo.transmission">
+            <el-radio-button
+              v-for="item in configInfo.transmission"
+              :label="item">
+            </el-radio-button>
+          </el-radio-group>
         </el-form-item>
         <el-form-item label='国家'>
-          <el-input v-model="newCarInfo.country"></el-input>
+          <el-radio-group v-model="newCarInfo.country">
+            <el-radio-button
+              v-for="item in configInfo.country"
+              :label="item">
+            </el-radio-button>
+          </el-radio-group>
         </el-form-item>
         <el-form-item label='生产方式'>
-          <el-input v-model="newCarInfo.produce"></el-input>
+          <el-radio-group v-model="newCarInfo.produce">
+            <el-radio-button
+              v-for="item in configInfo.produce"
+              :label="item">
+            </el-radio-button>
+          </el-radio-group>
         </el-form-item>
         <el-form-item label='结构'>
-          <el-input v-model="newCarInfo.structure"></el-input>
+          <el-radio-group v-model="newCarInfo.structure">
+            <el-radio-button
+              v-for="item in configInfo.structure"
+              :label="item">
+            </el-radio-button>
+          </el-radio-group>
         </el-form-item>
         <el-form-item label='座位'>
-          <el-input v-model="newCarInfo.seat"></el-input>
+          <el-radio-group v-model="newCarInfo.seat">
+            <el-radio-button
+              v-for="item in configInfo.seat"
+              :label="item">
+            </el-radio-button>
+          </el-radio-group>
         </el-form-item>
         <el-form-item label='关键字'>
           <el-input v-model="newCarInfo.keyword"></el-input>
@@ -199,31 +244,76 @@
             <el-input v-model='datailsCarListInfo.data.mname'></el-input>
           </el-form-item>
           <el-form-item label='等级'>
-            <el-input v-model='datailsCarListInfo.data.level'></el-input>
+            <el-radio-group v-model="datailsCarListInfo.data.level">
+              <el-radio-button
+                v-for="item in configInfo.level"
+                :label="item">
+              </el-radio-button>
+            </el-radio-group>
           </el-form-item>
           <el-form-item label='排量'>
-            <el-input v-model='datailsCarListInfo.data.output'></el-input>
+            <el-radio-group v-model="datailsCarListInfo.data.output">
+              <el-radio-button
+                v-for="item in configInfo.output"
+                :label="item">
+              </el-radio-button>
+            </el-radio-group>
           </el-form-item>
           <el-form-item label='驱动'>
-            <el-input v-model='datailsCarListInfo.data.drive'></el-input>
+            <el-radio-group v-model="datailsCarListInfo.data.drive">
+              <el-radio-button
+                v-for="item in configInfo.drive"
+                :label="item">
+              </el-radio-button>
+            </el-radio-group>
           </el-form-item>
           <el-form-item label='燃料'>
-            <el-input v-model='datailsCarListInfo.data.fuel'></el-input>
+            <el-radio-group v-model="datailsCarListInfo.data.fuel">
+              <el-radio-button
+                v-for="item in configInfo.fuel"
+                :label="item">
+              </el-radio-button>
+            </el-radio-group>
           </el-form-item>
           <el-form-item label='变速箱'>
-            <el-input v-model='datailsCarListInfo.data.transmission'></el-input>
+            <el-radio-group v-model="datailsCarListInfo.data.transmission">
+              <el-radio-button
+                v-for="item in configInfo.transmission"
+                :label="item">
+              </el-radio-button>
+            </el-radio-group>
           </el-form-item>
           <el-form-item label='国家'>
-            <el-input v-model='datailsCarListInfo.data.country'></el-input>
+            <el-radio-group v-model="datailsCarListInfo.data.country">
+              <el-radio-button
+                v-for="item in configInfo.country"
+                :label="item">
+              </el-radio-button>
+            </el-radio-group>
           </el-form-item>
           <el-form-item label='生产方式'>
-            <el-input v-model='datailsCarListInfo.data.produce'></el-input>
+            <el-radio-group v-model="datailsCarListInfo.data.produce">
+              <el-radio-button
+                v-for="item in configInfo.produce"
+                :label="item">
+              </el-radio-button>
+            </el-radio-group>
           </el-form-item>
           <el-form-item label='结构'>
-            <el-input v-model='datailsCarListInfo.data.structure'></el-input>
+            <el-radio-group v-model="datailsCarListInfo.data.structure">
+              <el-radio-button
+                v-for="item in configInfo.structure"
+                :label="item">
+              </el-radio-button>
+            </el-radio-group>
           </el-form-item>
           <el-form-item label='座位'>
-            <el-input v-model='datailsCarListInfo.data.seat'></el-input>
+            <el-radio-group v-model="datailsCarListInfo.data.seat">
+              <el-radio-button
+                v-for="item in configInfo.seat"
+                :label="item">
+              </el-radio-button>
+            </el-radio-group>
           </el-form-item>
           <el-form-item label='关键字'>
             <el-input v-model='datailsCarListInfo.data.keyword'></el-input>
@@ -366,7 +456,18 @@ export default {
       confirmDeletePopover: false,
       dialogAddCarVisible: false,
       dialogConfigVisible: false,
-      dialogCarListDetilsVisible: false
+      dialogCarListDetilsVisible: false,
+      configInfo: {
+        level: ["微型车", "小型车", "紧凑型车", "中型车", "中大型车", "大型车", "跑车", "MPV", "SUV", "微面", "微卡", "轻客", "皮卡"],
+        output: ["1.0及以下", "1.1-1.6L", "1.7-2.0L", "2.1-2.5L", "2.6-3.0L", "3.1-4.0L", "4.0L以上"],
+        country: ["中国", "德国", "日本", "美国", "韩国", "法国", "英国", "其他"],
+        transmission: ["手动", "自动"],
+        drive: ["前驱", "后驱", "四驱"],
+        fuel: ["汽油", "柴油", "油电混合", "纯电动", "插电式混动", "增程式"],
+        seat: ["2座", "4座", "5座", "6座", "7座", "7座以上"],
+        structure: ["两厢", "三厢", "掀背", "旅行版", "硬顶敞篷车", "软顶敞篷车", "硬顶跑车", "客车", "货车"],
+        produce: ["自主", "合资", "进口"]
+      }
     }
   },
   created() {

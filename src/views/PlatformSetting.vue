@@ -1,15 +1,23 @@
 <template lang="html">
   <div class="platform-setting"
     v-loading='loadingStatus'>
-    <el-form label-width='70px' class="title-stage-form">
+    <el-form label-width='75px' class="title-stage-form">
       <h3>平台活动管理</h3>
-      <el-form-item label='平台活动' v-if="!!titleStage[0]">
-        <el-input v-model='titleStage[0].value'>
-        </el-input><el-button type='primary' @click="submitTitleInfo">修改</el-button>
+      <el-form-item label='平台活动' v-if="!!titleStage.title2">
+        <el-input v-model='titleStage.title2'>
+        </el-input><el-button type='primary' @click="submitTitleInfo('title2', titleStage.title2)">修改</el-button>
       </el-form-item>
-      <el-form-item label='分期活动' v-if="!!titleStage[1]">
-        <el-input v-model='titleStage[1].value'>
-        </el-input><el-button @click="submitStageInfo" type='primary'>修改</el-button>
+      <el-form-item label='12期利率' v-if="!!titleStage.stages12">
+        <el-input v-model='titleStage.stages12'>
+        </el-input><el-button @click="submitStageInfo('stages12', titleStage.stages12)" type='primary'>修改</el-button>
+      </el-form-item>
+      <el-form-item label='24期利率' v-if="!!titleStage.stages24">
+        <el-input v-model='titleStage.stages24'>
+        </el-input><el-button @click="submitStageInfo('stages24', titleStage.stages24)" type='primary'>修改</el-button>
+      </el-form-item>
+      <el-form-item label='36期利率' v-if="!!titleStage.stages36">
+        <el-input v-model='titleStage.stages36'>
+        </el-input><el-button @click="submitStageInfo('stages36', titleStage.stages36)" type='primary'>修改</el-button>
       </el-form-item>
     </el-form>
     <div class="activity">
@@ -93,7 +101,7 @@
 export default {
   data() {
     return {
-      titleStage: [],
+      titleStage: {},
       homeImage: [],
       selectImage: [],
       headLine: [],
@@ -118,7 +126,9 @@ export default {
       this.axios.get(reqURL).then(response => {
         let data = response.data
         this.dataReady = false
-        this.titleStage = data.data
+        this.titleStage = data.data[0]
+        console.log(this.titleStage);
+
       })
     },
     anotherInitData() {
@@ -133,10 +143,10 @@ export default {
         this.headLine = data.headLine
       })
     },
-    submitTitleInfo() {
+    submitTitleInfo(key, val) {
       let reqURL = '/system/update.action'
-      let titleValue = this.titleStage[0].value
-      let data = {id: 1, value:  titleValue }
+      let id = this.titleStage.idea
+      let data = {id: 1, [key]: val }
 
       this.axios.post(reqURL, data, {
         headers: { 'Content-Type': 'application/x-www-form-urlencoded'}
@@ -151,10 +161,10 @@ export default {
         }
       })
     },
-    submitStageInfo() {
+    submitStageInfo(key, val) {
       let reqURL = '/system/update.action'
-      let stageValue = this.titleStage[1].value
-      let data = {id: 2, value:  stageValue}
+      let id = this.titleStage.idea
+      let data = {id: 1, [key]: val }
 
       this.axios.post(reqURL, data, {
         headers: { 'Content-Type': 'application/x-www-form-urlencoded'}

@@ -192,6 +192,13 @@
           label='活动'>
         </el-table-column>
         <el-table-column
+          label='配置表'>
+          <template scope='scope'>
+            <!-- {{ scope.row.data.configure }} -->
+            <div :class="['configure-hint',{active: !!scope.row.data.configure, 'no-active': !scope.row.data.configure}]"></div>
+          </template>
+        </el-table-column>
+        <el-table-column
           inline-template
           label='操作'
           width='260'>
@@ -650,4 +657,18 @@ export default {
 </script>
 
 <style lang="css">
+.configure-hint {
+  margin-left: 1em;
+  width: 1em;
+  height: 1em;
+  border-radius: 50%;
+}
+
+.configure-hint.active {
+  background-color: #13CE66;
+}
+
+.configure-hint.no-active {
+  background-color: #FF4949;
+}
 </style>

@@ -3,19 +3,19 @@
     v-loading='loadingStatus'>
     <el-form label-width='75px' class="title-stage-form">
       <h3>平台活动管理</h3>
-      <el-form-item label='平台活动' v-if="!!titleStage.title2">
+      <el-form-item label='平台活动'>
         <el-input v-model='titleStage.title2'>
         </el-input><el-button type='primary' @click="submitTitleInfo('title2', titleStage.title2)">修改</el-button>
       </el-form-item>
-      <el-form-item label='12期利率' v-if="!!titleStage.stages12">
+      <el-form-item label='12期利率'>
         <el-input v-model='titleStage.stages12'>
         </el-input><el-button @click="submitStageInfo('stages12', titleStage.stages12)" type='primary'>修改</el-button>
       </el-form-item>
-      <el-form-item label='24期利率' v-if="!!titleStage.stages24">
+      <el-form-item label='24期利率'>
         <el-input v-model='titleStage.stages24'>
         </el-input><el-button @click="submitStageInfo('stages24', titleStage.stages24)" type='primary'>修改</el-button>
       </el-form-item>
-      <el-form-item label='36期利率' v-if="!!titleStage.stages36">
+      <el-form-item label='36期利率'>
         <el-input v-model='titleStage.stages36'>
         </el-input><el-button @click="submitStageInfo('stages36', titleStage.stages36)" type='primary'>修改</el-button>
       </el-form-item>
@@ -145,8 +145,8 @@ export default {
     },
     submitTitleInfo(key, val) {
       let reqURL = '/system/update.action'
-      let id = this.titleStage.idea
-      let data = {id: 1, [key]: val }
+      let id = this.titleStage.id
+      let data = {id: id, [key]: val }
 
       this.axios.post(reqURL, data, {
         headers: { 'Content-Type': 'application/x-www-form-urlencoded'}
@@ -163,8 +163,8 @@ export default {
     },
     submitStageInfo(key, val) {
       let reqURL = '/system/update.action'
-      let id = this.titleStage.idea
-      let data = {id: 1, [key]: val }
+      let id = this.titleStage.id
+      let data = {id: id, [key]: val }
 
       this.axios.post(reqURL, data, {
         headers: { 'Content-Type': 'application/x-www-form-urlencoded'}

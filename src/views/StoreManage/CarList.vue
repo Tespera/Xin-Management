@@ -192,11 +192,10 @@
           label='活动'>
         </el-table-column>
         <el-table-column
+          inline-template
           label='配置表'>
-          <template scope='scope'>
-            <!-- {{ scope.row.data.configure }} -->
-            <div :class="['configure-hint',{active: !!scope.row.data.configure, 'no-active': !scope.row.data.configure}]"></div>
-          </template>
+          <div :class="['configure-hint',{active: !!row.data.configure, 'no-active': !row.data.configure}]">
+          </div>
         </el-table-column>
         <el-table-column
           inline-template
@@ -632,6 +631,7 @@ export default {
     },
     handleConfigSuccess(response, file, fileList) {
       this.dialogConfigVisible = false
+      this.initData(this.currentPage)
       this.$message({
         message: '配置表上传成功',
         type: 'success'

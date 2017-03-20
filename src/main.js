@@ -43,7 +43,6 @@ new Vue({
 
 let indexScrollTop = 0;
 router.beforeEach((route, redirect, next) => {
-  console.log(route, redirect,);
   if (route.path !== '/') {
     indexScrollTop = document.body.scrollTop;
   }

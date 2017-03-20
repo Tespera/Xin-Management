@@ -7,6 +7,9 @@ import StoreDetils from './views/StoreManage/StoreDetils.vue'
 import CarModels from './views/StoreManage/CarModels.vue'
 import CarList from './views/StoreManage/CarList.vue'
 
+import CarMaintain from './views/CarMaintain.vue'
+
+
 import PlatformSetting from './views/PlatformSetting.vue'
 
 const routes = [
@@ -22,7 +25,7 @@ const routes = [
       {
         path: 'platform',
         name: 'Platform',
-        meta: { navIndex: '2'},
+        meta: { navIndex: '1-2'},
         component: PlatformSetting
       },
       {
@@ -34,20 +37,31 @@ const routes = [
           {
             path: 'details',
             name: 'StoreDetils',
-            meta: { navIndex: '1'},
+            meta: { navIndex: '1-1'},
             component: StoreDetils
           },
           {
             path: 'models',
             name: 'CarModels',
-            meta: { navIndex: '1'},
+            meta: { navIndex: '1-1'},
             component: CarModels
           },
           {
             path: 'carlist',
             name: 'CarList',
-            meta: { navIndex: '1'},
+            meta: { navIndex: '1-1'},
             component: CarList
+          }
+        ]
+      },
+      {
+        path: 'maintain',
+        name: 'Maintain',
+        component: CarMaintain,
+        meta: { navIndex: '2'},
+        children: [
+          {
+            path: '',
           }
         ]
       }

@@ -127,8 +127,6 @@ export default {
         let data = response.data
         this.dataReady = false
         this.titleStage = data.data[0]
-        console.log(this.titleStage);
-
       })
     },
     anotherInitData() {

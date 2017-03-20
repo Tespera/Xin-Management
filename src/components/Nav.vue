@@ -3,20 +3,37 @@
     <div class="nav-header">
       <h1>管理系统</h1>
     </div>
-    <el-menu
-      :default-active='defaultActive'
-      :router="true">
-      <el-menu-item
-        index='1'
-        :route="{ name: 'StoreDetils'}">
-        <i class="el-icon-document"></i>4S店管理
-      </el-menu-item>
-      <el-menu-item
-        index='2'
-        :route="{ name: 'Platform'}">
-        <i class="el-icon-setting"></i>平台管理
-      </el-menu-item>
-    </el-menu>
+      <el-menu
+        :default-active='defaultActive'
+        :router="true">
+        <el-submenu index='1'>
+          <template slot='title'>
+            <!-- <i class="el-icon-message"></i> -->
+            导航一
+          </template>
+          <el-menu-item
+            index='1-1'
+            :route="{ name: 'StoreDetils'}">
+            <i class="el-icon-document"></i>4S店管理
+          </el-menu-item>
+          <el-menu-item
+            index='1-2'
+            :route="{ name: 'Platform'}">
+            <i class="el-icon-setting"></i>平台管理
+          </el-menu-item>
+        </el-submenu>
+        <el-submenu index='2'>
+          <template slot='title'>
+            <!-- <i class="el-icon-message"></i> -->
+            导航二
+          </template>
+          <el-menu-item
+            index='2-1'
+            :route="{ name: 'Maintain'}">
+            <i class="el-icon-document"></i>养车门店
+          </el-menu-item>
+        </el-submenu>
+      </el-menu>
   </div>
 </template>
 

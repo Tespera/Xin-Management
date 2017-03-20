@@ -44,7 +44,6 @@ export default {
   },
   methods: {
     handleSubmit() {
-      console.log(this.$route);
       let redirect = this.$route.query.redirect
       if(this.loginData.account == 'xinba' && this.loginData.pass == 'xinba2017') {
         this.$refs.loginForm.resetFields()

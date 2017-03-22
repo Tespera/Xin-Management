@@ -8,6 +8,7 @@ import CarModels from './views/StoreManage/CarModels.vue'
 import CarList from './views/StoreManage/CarList.vue'
 
 import CarMaintain from './views/CarMaintain.vue'
+import StoreMaintain from './views/CarMaintain/StoreMaintain.vue'
 
 
 import PlatformSetting from './views/PlatformSetting.vue'
@@ -56,12 +57,15 @@ const routes = [
       },
       {
         path: 'maintain',
-        name: 'Maintain',
+        name: 'CarMaintain',
         component: CarMaintain,
         meta: { navIndex: '2'},
         children: [
           {
-            path: '',
+            path: 'StoreMaintain',
+            name: 'StoreMaintain',
+            meta: { navIndex: '2-1'},
+            component: StoreMaintain
           }
         ]
       }

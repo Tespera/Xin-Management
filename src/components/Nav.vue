@@ -4,8 +4,7 @@
       <h1>管理系统</h1>
     </div>
       <el-menu
-        :default-active='defaultActive'
-        :router="true">
+        :default-active='defaultActive'>
         <el-submenu index='1'>
           <template slot='title'>
             <!-- <i class="el-icon-message"></i> -->
@@ -13,12 +12,12 @@
           </template>
           <el-menu-item
             index='1-1'
-            :route="{ name: 'StoreDetils'}">
+            @click.native="handleClick('StoreDetils')">
             <i class="el-icon-document"></i>4S店管理
           </el-menu-item>
           <el-menu-item
             index='1-2'
-            :route="{ name: 'Platform'}">
+            @click.native="handleClick('Platform')">
             <i class="el-icon-setting"></i>平台管理
           </el-menu-item>
         </el-submenu>
@@ -29,7 +28,7 @@
           </template>
           <el-menu-item
             index='2-1'
-            :route="{ name: 'Maintain'}">
+            @click.native="handleClick('StoreMaintain')">
             <i class="el-icon-document"></i>养车门店
           </el-menu-item>
         </el-submenu>
@@ -45,9 +44,14 @@ export default {
     }
   },
   created() {
-    let currentPath = this.$route.meta.navIndex
-    if(!!currentPath) {
-      this.defaultActive = currentPath
+    // let currentPath = this.$route.meta.navIndex
+    // if(!!currentPath) {
+    //   this.defaultActive = currentPath
+    // }
+  },
+  methods: {
+    handleClick(path) {
+      this.$router.push({ name: path})
     }
   }
 }

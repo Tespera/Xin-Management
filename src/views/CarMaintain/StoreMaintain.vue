@@ -15,19 +15,19 @@
         :model="newStoreInfo"
         label-width="75px">
         <el-form-item label='商家名'>
-          <el-input v-model='newStoreInfo.name'>
+          <el-input v-model='newStoreInfo.mbname'>
           </el-input>
         </el-form-item>
         <el-form-item label='地址'>
-          <el-input v-model='newStoreInfo.name'>
+          <el-input v-model='newStoreInfo.baddress'>
           </el-input>
         </el-form-item>
         <el-form-item label='电话'>
-          <el-input v-model='newStoreInfo.name'>
+          <el-input v-model='newStoreInfo.bphone'>
           </el-input>
         </el-form-item>
         <el-form-item label='姓名'>
-          <el-input v-model='newStoreInfo.name'>
+          <el-input v-model='newStoreInfo.uname'>
           </el-input>
         </el-form-item>
         <el-form-item label='经度'>
@@ -37,8 +37,21 @@
           <el-input v-model="newStoreInfo.latitude"></el-input>
         </el-form-item>
         <el-form-item label='营业时间'>
-          <el-input v-model='newStoreInfo.name'>
+          <el-input v-model='newStoreInfo.time'>
           </el-input>
+        </el-form-item>
+        <el-form-item label='主图'>
+          <el-upload
+            v-if="dialogAddStoreVisible"
+            :action="$store.state.baseURL + '/simage/upload.action'"
+            name='uploadFile'
+            type="drag"
+            :on-success="handleAddStoreShowImg"
+            :thumbnail-mode="true">
+            <i class="el-icon-upload"></i>
+            <div class="el-dragger__text">将文件拖到此处，或<em>点击上传</em></div>
+            <!-- <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div> -->
+          </el-upload>
         </el-form-item>
       </el-form>
       <div slot='footer'>
@@ -48,9 +61,9 @@
     </el-dialog>
     <div class="maintain-table">
       <el-table
-        :data='testDate'>
+        :data='storeData'>
         <el-table-column
-          prop='bname'
+          prop='mbname'
           label='商家名'>
         </el-table-column>
         <el-table-column
@@ -66,7 +79,7 @@
           label='姓名'>
         </el-table-column>
         <el-table-column
-          prop='btime'
+          prop='time'
           label='营业时间'>
         </el-table-column>
         <el-table-column
@@ -114,7 +127,33 @@
         v-if="dialogStoreDetilsVisible">
         <el-form label-width='75px'>
           <el-form-item label='商家名'>
-            <el-input v-model='detailsStoreInfo.data.bname'></el-input>
+            <el-input v-model='detailsStoreInfo.mbname'></el-input>
+          </el-form-item>
+          <el-form-item label='地址'>
+            <el-input v-model='detailsStoreInfo.baddress'></el-input>
+          </el-form-item>
+          <el-form-item label='电话'>
+            <el-input v-model='detailsStoreInfo.bphone'></el-input>
+          </el-form-item>
+          <el-form-item label='姓名'>
+            <el-input v-model='detailsStoreInfo.uname'></el-input>
+          </el-form-item>
+          <el-form-item label='营业时间'>
+            <el-input v-model='detailsStoreInfo.time'></el-input>
+          </el-form-item>
+          <el-form-item label='主图'>
+            <el-upload
+              :action="$store.state.baseURL + '/update/image.action'"
+              type="drag"
+              name='uploadFile'
+              :data="{imageName: detailsStoreInfo.bshowimage}"
+              :on-success="handleChangeStoreShowImg"
+              :thumbnail-mode="true"
+              :default-file-list="[{name: detailsStoreInfo.bshowimage, url: $store.state.baseImgURL + detailsStoreInfo.bshowimage }]">
+              <i class="el-icon-upload"></i>
+              <div class="el-dragger__text">将文件拖到此处，或<em>点击上传</em></div>
+              <!-- <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div> -->
+            </el-upload>
           </el-form-item>
         </el-form>
         <div slot='footer'>
@@ -173,21 +212,7 @@
 export default {
   data() {
     return {
-      testDate: [{
-          bname: '商家名',
-          baddress: '地址',
-          bphone: '电话',
-          uname: '商家名',
-          btime: '营业时间',
-        },
-        {
-          bname: '商家名',
-          baddress: '地址',
-          bphone: '电话',
-          uname: '商家名',
-          btime: '营业时间',
-        }
-      ],
+      storeData: [],
       newStoreInfo: {},
       detailsStoreInfo: {},
       confirmDeletePopover: false,
@@ -199,9 +224,22 @@ export default {
       pageNum: 0
     }
   },
+  created() {
+    this.initData()
+  },
   methods: {
     initData(page) {
+      let pageNum = page > 0 ? page : 1
+      let reqURL = '/maintainbusiness/getall.action?page=' + pageNum
 
+      this.axios.get(reqURL).then(response => {
+        let data = response.data
+
+        this.storeData = data.rows
+        this.pageNum = data.total
+        this.pageSize = data.pageNumber
+
+      })
     },
     cancelDeleteInfo() {
       this.confirmDeletePopover = true
@@ -209,35 +247,112 @@ export default {
         this.confirmDeletePopover = false
       }, 0)
     },
-    handleDeleteInfo($index, row, column) {
+    handleDeleteInfo(index, row, column) {
+      let bid = row.mbid
+      let reqURL = '/maintainbusiness/delete.action?mbid=' + bid
 
       this.confirmDeletePopover = true
       setTimeout(() => {
         this.confirmDeletePopover = false
       }, 0)
 
-      console.log('删除成功');
+      this.axios.get(reqURL).then(response => {
+        let data = response.data
+        if (data.status == 200) {
+          let currentPage
+          let pageXSize = this.currentPage * this.pageSize
+
+          if (pageXSize < this.pageNum) {
+            this.initData(this.currentPage)
+          }
+
+          if(pageXSize = this.pageNum) {
+            if (this.pageNum % this.pageSize == 1 && this.currentPage!= 1) {
+              this.initData(this.currentPage - 1)
+            } else {
+              this.initData(this.currentPage)
+            }
+          }
+        }
+      })
     },
     resetStoreInfo() {
-      let storeInfo = {}
-      this.newStoreInfo = {}
+      let storeInfo = {
+        mbname: '',
+        baddress: '',
+        bphone: '',
+        uname: '',
+        longitude: '',
+        latitude: '',
+        time: ''
+      }
+      this.newStoreInfo = storeInfo
     },
     submitStoreInfo() {
-      console.log('ok')
+      this.axios({
+        url: '/maintainbusiness/add.action',
+        method: 'post',
+        data: this.newStoreInfo,
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded'}
+      }).then(response => {
+        let data = response.data
+        if (data.status == 200) {
+          let lastPage = Math.floor(this.pageNum / this.pageSize) + 1;
+
+          if (this.pageNum % this.pageSize == 0) {
+            this.pageNum = this.pageNum + 1
+          }
+
+          this.currentPage = lastPage
+          this.dialogAddStoreVisible = false
+          this.initData(lastPage)
+          this.resetStoreInfo()
+        }
+      })
     },
     handleEdit(index, row, column) {
       this.dialogStoreDetilsVisible = true
+
+      let data = row
+      let obj = {}
+
+      for (let key in data) {
+        if(key != 'bdate') {
+          obj[key] = data[key]
+        }
+      }
+
+      this.detailsStoreInfo = obj
     },
     handleCarouseEdit(index, row, column) {
       this.dialogCarouseVisible = true
     },
     submitStoreChange() {
+      let data = this.detailsStoreInfo
 
+      this.axios({
+        url: '/maintainbusiness/update.action',
+        method: 'post',
+        data: data,
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded'}
+      }).then(response => {
+        let data = response.data
+        if (data.status == 200) {
+          this.initData(this.currentPage)
+          this.dialogStoreDetilsVisible = false;
+        }
+      })
     },
-    handleCurrentChange() {
+    handleCurrentChange(val) {
       this.currentPage = val
       this.initData(val)
-    }
+    },
+    handleAddStoreShowImg(response, file, fileList) {
+      this.newStoreInfo.bshowimage = response.url
+    },
+    handleChangeStoreShowImg(response, file, fileList) {
+      this.detailsStoreInfo.bshowimage = response.url
+    },
   }
 }
 </script>

@@ -63,23 +63,23 @@
       <el-table
         :data='storeData'>
         <el-table-column
-          prop='mbname'
+          prop='data.mbname'
           label='商家名'>
         </el-table-column>
         <el-table-column
-          prop='baddress'
+          prop='data.baddress'
           label='地址'>
         </el-table-column>
         <el-table-column
-          prop='bphone'
+          prop='data.bphone'
           label='电话'>
         </el-table-column>
         <el-table-column
-          prop='uname'
+          prop='data.uname'
           label='姓名'>
         </el-table-column>
         <el-table-column
-          prop='time'
+          prop='data.time'
           label='营业时间'>
         </el-table-column>
         <el-table-column
@@ -168,7 +168,7 @@
         v-model="dialogCarouseVisible"
         v-if="dialogCarouseVisible">
         <template
-          v-for="item in storeInfo[currentCarouseImages.index].bImage">
+          v-for="item in storeData[currentCarouseImages.index].bImage">
           <el-upload
             type="drag"
             name="uploadFile"
@@ -176,7 +176,7 @@
             :on-success='uploadCarouseSuccess'
             :default-file-list="[{name: item.image, url: $store.state.baseImgURL + item.image, iid: item.iid}]"
             :on-remove='removeCarouse'
-            :data="{id: currentCarouseImages.bid, idName: 'bid', iid: item.iid}"
+            :data="{id: currentCarouseImages.bid, idName: 'mbid', iid: item.iid}"
             :thumbnail-mode="true">
             <i class="el-icon-upload"></i>
             <div class="el-dragger__text">将文件拖到此处，或<em>点击上传</em></div>
@@ -187,7 +187,7 @@
           type="drag"
           name="uploadFile"
           :action="$store.state.baseURL + '/images/upload.action'"
-          :data="{id: currentCarouseImages.bid, idName: 'bid', iid: '-1'}"
+          :data="{id: currentCarouseImages.bid, idName: 'mbid', iid: '-1'}"
           :on-success='uploadCarouseSuccess'
           :thumbnail-mode="true">
           <i class="el-icon-upload"></i>
@@ -221,7 +221,8 @@ export default {
       dialogStoreDetilsVisible: false,
       currentPage: 1,
       pageSize: 0,
-      pageNum: 0
+      pageNum: 0,
+      currentCarouseImages: {}
     }
   },
   created() {
@@ -248,7 +249,7 @@ export default {
       }, 0)
     },
     handleDeleteInfo(index, row, column) {
-      let bid = row.mbid
+      let bid = row.data.mbid
       let reqURL = '/maintainbusiness/delete.action?mbid=' + bid
 
       this.confirmDeletePopover = true
@@ -313,7 +314,7 @@ export default {
     handleEdit(index, row, column) {
       this.dialogStoreDetilsVisible = true
 
-      let data = row
+      let data = row.data
       let obj = {}
 
       for (let key in data) {
@@ -326,6 +327,8 @@ export default {
     },
     handleCarouseEdit(index, row, column) {
       this.dialogCarouseVisible = true
+      this.currentCarouseImages.bid = row.data.mbid
+      this.currentCarouseImages.index = index
     },
     submitStoreChange() {
       let data = this.detailsStoreInfo
@@ -353,6 +356,21 @@ export default {
     handleChangeStoreShowImg(response, file, fileList) {
       this.detailsStoreInfo.bshowimage = response.url
     },
+    uploadCarouseSuccess(response, file, fileList) {
+      this.initData(this.currentPage)
+    },
+    removeCarouse(file) {
+      let reqURL = '/images/delete.action'
+      let data = {
+        iid: file.iid
+      }
+      this.axios.post(reqURL, data, {
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded'}
+      }).then(response => {
+        let data = response.data
+        this.initData(this.currentPage)
+      })
+    }
   }
 }
 </script>
@@ -391,5 +409,15 @@ export default {
   .store-maintain .store-pagination .el-pagination {
     text-align: center;
     margin-top: 15px;
-}
+  }
+
+  .store-maintain .carouse-edit .el-dialog__body {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .store-maintain .el-upload {
+    margin: 0 5px 6px;
+    /*display: inline-block;*/
+  }
 </style>

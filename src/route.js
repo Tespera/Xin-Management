@@ -9,6 +9,7 @@ import CarList from './views/StoreManage/CarList.vue'
 
 import CarMaintain from './views/CarMaintain.vue'
 import StoreMaintain from './views/CarMaintain/StoreMaintain.vue'
+import Coupon from './views/CarMaintain/Coupon.vue'
 
 
 import PlatformSetting from './views/PlatformSetting.vue'
@@ -62,10 +63,16 @@ const routes = [
         meta: { navIndex: '2'},
         children: [
           {
-            path: 'StoreMaintain',
+            path: 'sotre',
             name: 'StoreMaintain',
             meta: { navIndex: '2-1'},
             component: StoreMaintain
+          },
+          {
+            path: 'coupon',
+            name: 'Coupon',
+            meta: { navIndex: '2-2'},
+            component: Coupon
           }
         ]
       }

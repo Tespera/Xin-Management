@@ -40,6 +40,19 @@
           <el-input v-model='newStoreInfo.time'>
           </el-input>
         </el-form-item>
+        <el-form-item label='密码'>
+          <el-input v-model='newStoreInfo.mpassword'>
+          </el-input>
+        </el-form-item>
+        <el-form-item label='热门'>
+          <el-switch
+            v-model='newStoreInfo.ishot'
+            on-text='是'
+            off-text='否'
+            on-color="#13ce66"
+            off-color="#ff4949">
+          </el-switch>
+        </el-form-item>
         <el-form-item label='主图'>
           <el-upload
             v-if="dialogAddStoreVisible"
@@ -85,8 +98,7 @@
         <el-table-column
           inline-template
           label='操作'
-          width='200'
-          >
+          width='200'>
           <div>
             <el-popover
               ref='deleteConfirm'
@@ -138,8 +150,26 @@
           <el-form-item label='姓名'>
             <el-input v-model='detailsStoreInfo.uname'></el-input>
           </el-form-item>
+          <el-form-item label='经度'>
+            <el-input v-model="detailsStoreInfo.longitude"></el-input>
+          </el-form-item>
+          <el-form-item label='纬度'>
+            <el-input v-model="detailsStoreInfo.latitude"></el-input>
+          </el-form-item>
           <el-form-item label='营业时间'>
             <el-input v-model='detailsStoreInfo.time'></el-input>
+          </el-form-item>
+          <el-form-item label='密码'>
+            <el-input v-model='detailsStoreInfo.mpassword'></el-input>
+          </el-form-item>
+          <el-form-item label='热门'>
+            <el-switch
+              v-model='detailsStoreInfo.ishot'
+              on-text='是'
+              off-text='否'
+              on-color="#13ce66"
+              off-color="#ff4949">
+            </el-switch>
           </el-form-item>
           <el-form-item label='主图'>
             <el-upload
@@ -213,7 +243,9 @@ export default {
   data() {
     return {
       storeData: [],
-      newStoreInfo: {},
+      newStoreInfo: {
+        ishot: false
+      },
       detailsStoreInfo: {},
       confirmDeletePopover: false,
       dialogAddStoreVisible: false,

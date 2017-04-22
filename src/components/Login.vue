@@ -45,16 +45,30 @@ export default {
   methods: {
     handleSubmit() {
       let redirect = this.$route.query.redirect
-      if(this.loginData.account == 'xinba' && this.loginData.pass == 'xinba2017') {
-        this.$refs.loginForm.resetFields()
-        this.$store.commit('changeLoggedState', true)
-
-        if(redirect !=='/login' && redirect !=='' && !!redirect) {
-          this.$router.push(redirect)
-        } else {
-          this.$router.push({path:'/'})
-        }
+      let reqURL = '/car/login.action'
+      let data = {
+        buser: this.loginData.account,
+        bpassword: this.loginData.pass,
+        type: 0
       }
+
+      this.axios.post(reqURL, data, {
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded'}
+      }).then(response => {
+        let data = response.data
+        let status = data.status
+
+        if(status == 200) {
+          this.$refs.loginForm.resetFields()
+          this.$store.commit('changeLoggedState', true)
+
+          if(redirect !=='/login' && redirect !=='' && !!redirect) {
+            this.$router.push(redirect)
+          } else {
+            this.$router.push({path:'/'})
+          }
+        }
+      })
     },
   }
 }

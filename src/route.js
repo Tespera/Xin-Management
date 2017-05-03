@@ -13,6 +13,7 @@ import Coupon from './views/CarMaintain/Coupon.vue'
 
 
 import PlatformSetting from './views/PlatformSetting.vue'
+import MaintainSetting from './views/CarMaintain/MaintainSetting.vue'
 
 const routes = [
   {
@@ -73,6 +74,12 @@ const routes = [
             name: 'Coupon',
             meta: { navIndex: '2-2'},
             component: Coupon
+          },
+          {
+            path: 'setting',
+            name: 'MaintainSetting',
+            meta: { navIndex: '2-3'},
+            component: MaintainSetting
           }
         ]
       }

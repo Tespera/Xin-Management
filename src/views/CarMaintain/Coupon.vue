@@ -290,6 +290,11 @@ export default {
   align-self: flex-end;
 }
 
+.coupon_rules {
+  display: inline-flex;
+  flex-direction: column;
+}
+
 .coupon_rules .coupon_list_header h3 {
   margin: 14px 0 8px;
 }

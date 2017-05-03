@@ -37,6 +37,11 @@
             @click.native="handleClick('Coupon')">
             <i class="el-icon-setting"></i>优惠券管理
           </el-menu-item>
+          <el-menu-item
+            index='2-3'
+            @click.native="handleClick('MaintainSetting')">
+            <i class="el-icon-setting"></i>养车管理
+          </el-menu-item>
         </el-submenu>
       </el-menu>
   </div>

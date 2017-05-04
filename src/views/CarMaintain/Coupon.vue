@@ -15,6 +15,7 @@
         <div class="coupon_content">
           <h3>{{item.rname}}</h3>
           <span>优惠{{item.price}}元</span>
+          <span>满{{item.condition}}元可用</span>
           <span>{{item.typestr}}</span>
         </div>
         <div class="coupon_function">
@@ -80,6 +81,9 @@
           </el-form-item>
           <el-form-item label='优惠金额'>
             <el-input v-model='newCoupons.price' type='number'></el-input>
+          </el-form-item>
+          <el-form-item label='满用'>
+            <el-input v-model='newCoupons.condition' type='number'></el-input>
           </el-form-item>
           <el-form-item label='使用范围'>
             <el-radio-group v-model="newCoupons.type">
@@ -276,7 +280,8 @@ export default {
   margin: 0px 0 5px;
 }
 
-.coupon .coupon_container .coupon_content > span:nth-of-type(1) {
+.coupon .coupon_container .coupon_content > span:nth-of-type(1),
+.coupon .coupon_container .coupon_content > span:nth-of-type(2) {
   margin-bottom: 5px;
 }
 

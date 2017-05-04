@@ -39,13 +39,17 @@ export default {
       homeCarouse: []
     }
   },
+  created() {
+    this.initData()
+  },
   methods: {
     initData() {
-      let reqURL = ''
+      let reqURL = '/home/getAll.action'
 
       this.axios.get(reqURL).then(response => {
         let data = response.data
-
+        this.homeCarouse = data.data
+        console.log(this.homeCarouse);
       })
     },
     addMaintainHomeCarousel() {

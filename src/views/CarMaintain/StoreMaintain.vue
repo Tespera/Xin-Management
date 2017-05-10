@@ -299,8 +299,8 @@ export default {
             this.initData(this.currentPage)
           }
 
-          if(pageXSize = this.pageNum) {
-            if (this.pageNum % this.pageSize == 1 && this.currentPage!= 1) {
+          if (pageXSize = this.pageNum) {
+            if (this.pageNum % this.pageSize == 1 && this.currentPage != 1) {
               this.initData(this.currentPage - 1)
             } else {
               this.initData(this.currentPage)
@@ -326,7 +326,7 @@ export default {
         url: '/maintainbusiness/add.action',
         method: 'post',
         data: this.newStoreInfo,
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded'}
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
       }).then(response => {
         let data = response.data
         if (data.status == 200) {
@@ -350,7 +350,7 @@ export default {
       let obj = {}
 
       for (let key in data) {
-        if(key != 'bdate') {
+        if (key != 'bdate') {
           obj[key] = data[key]
         }
       }
@@ -369,7 +369,7 @@ export default {
         url: '/maintainbusiness/update.action',
         method: 'post',
         data: data,
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded'}
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
       }).then(response => {
         let data = response.data
         if (data.status == 200) {
@@ -397,7 +397,7 @@ export default {
         iid: file.iid
       }
       this.axios.post(reqURL, data, {
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded'}
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
       }).then(response => {
         let data = response.data
         this.initData(this.currentPage)
@@ -408,48 +408,48 @@ export default {
 </script>
 
 <style lang="css">
-  .store-maintain {
-    padding: 0 20px;
-  }
+.store-maintain {
+  padding: 0 20px;
+}
 
-  .store-maintain .right-header {
-    display: flex;
-    height: 56px;
-    align-items: center;
-  }
+.store-maintain .right-header {
+  display: flex;
+  height: 56px;
+  align-items: center;
+}
 
-  .store-maintain .store-tooltip {
-    background-color: #EFF2F7;
-    height: 40px;
-    box-sizing: border-box;
-    border: 1px solid #e0e6ed;
-    border-bottom: 0;
-    vertical-align: middle;
-    color: #8492a6;
-    display: flex;
-    justify-content: flex-end;
-    align-content: stretch;
-  }
+.store-maintain .store-tooltip {
+  background-color: #EFF2F7;
+  height: 40px;
+  box-sizing: border-box;
+  border: 1px solid #e0e6ed;
+  border-bottom: 0;
+  vertical-align: middle;
+  color: #8492a6;
+  display: flex;
+  justify-content: flex-end;
+  align-content: stretch;
+}
 
-  .store-maintain .store-tooltip .el-button--text {
-    width: 40px;
-    box-sizing: border-box;
-    border-radius: 0;
-    border-left: 1px solid #e0e6ed;
-  }
+.store-maintain .store-tooltip .el-button--text {
+  width: 40px;
+  box-sizing: border-box;
+  border-radius: 0;
+  border-left: 1px solid #e0e6ed;
+}
 
-  .store-maintain .store-pagination .el-pagination {
-    text-align: center;
-    margin-top: 15px;
-  }
+.store-maintain .store-pagination .el-pagination {
+  text-align: center;
+  margin-top: 15px;
+}
 
-  .store-maintain .carouse-edit .el-dialog__body {
-    display: flex;
-    flex-wrap: wrap;
-  }
+.store-maintain .carouse-edit .el-dialog__body {
+  display: flex;
+  flex-wrap: wrap;
+}
 
-  .store-maintain .el-upload {
-    margin: 0 5px 6px;
-    /*display: inline-block;*/
-  }
+.store-maintain .el-upload {
+  margin: 0 5px 6px;
+  /*display: inline-block;*/
+}
 </style>

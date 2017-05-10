@@ -1,4 +1,4 @@
-<template lang="html">
+<template>
   <div>
     <div class="right-header">
       <el-breadcrumb>
@@ -7,13 +7,25 @@
       </el-breadcrumb>
     </div>
     <div class="store-tooltip">
-      <el-button type='text' icon='plus' @click="dialogAddModelVisible = true"></el-button>
+      <el-button type='text'
+        icon='search'
+        @click='dialogCopyModelVisible = true'></el-button>
+      <el-button type='text'
+        icon='plus'
+        @click="dialogAddModelVisible = true"></el-button>
     </div>
-    <el-dialog
-      title="添加车系"
+    <el-dialog title="搜索车系"
+      v-model="dialogCopyModelVisible">
+      <el-autocomplete placeholder="请输入车系名"
+        v-model='selectedModel'
+        :fetch-suggestions='querySearch'
+        :trigger-on-focus="false"
+        @select='handleModelSelect'>
+      </el-autocomplete>
+    </el-dialog>
+    <el-dialog title="添加车系"
       v-model='dialogAddModelVisible'>
-      <el-form
-        :model="newModelInfo"
+      <el-form :model="newModelInfo"
         label-width="75px">
         <el-form-item label='车系'>
           <el-input v-model="newModelInfo.gname"></el-input>
@@ -21,28 +33,28 @@
         <el-form-item label='活动'>
           <el-input v-model="newModelInfo.title"></el-input>
         </el-form-item>
-        <!-- <el-form-item label='最低价格'>
-          <el-input v-model="newModelInfo.minprice"></el-input>
-        </el-form-item>
-        <el-form-item label='最高价格'>
-          <el-input v-model="newModelInfo.maxprice"></el-input>
-        </el-form-item> -->
+        <!--<el-form-item label='最低价格'>
+                          <el-input v-model="newModelInfo.minprice"></el-input>
+                        </el-form-item>
+                        <el-form-item label='最高价格'>
+                          <el-input v-model="newModelInfo.maxprice"></el-input>
+                        </el-form-item>-->
         <el-form-item label='主图'>
-          <el-upload
-            v-if="dialogAddModelVisible"
+          <el-upload v-if="dialogAddModelVisible"
             :action="$store.state.baseURL + '/simage/upload.action'"
             name='uploadFile'
             type="drag"
             :on-success="handleAddModelShowImg"
             :thumbnail-mode="true">
             <i class="el-icon-upload"></i>
-            <div class="el-dragger__text">将文件拖到此处，或<em>点击上传</em></div>
+            <div class="el-dragger__text">将文件拖到此处，或
+              <em>点击上传</em>
+            </div>
             <!-- <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div> -->
           </el-upload>
         </el-form-item>
         <el-form-item label='热门'>
-          <el-switch
-            v-model='newModelInfo.ishot'
+          <el-switch v-model='newModelInfo.ishot'
             on-text='是'
             off-text='否'
             on-color="#13ce66"
@@ -56,63 +68,56 @@
       </div>
     </el-dialog>
     <div class="store-table">
-      <el-table
-        :data='modelInfo'>
-        <el-table-column
-          prop='data.gname'
+      <el-table :data='modelInfo'>
+        <el-table-column prop='data.gname'
           label='车系'>
         </el-table-column>
-        <el-table-column
-          prop='data.title'
+        <el-table-column prop='data.title'
           label='活动'>
         </el-table-column>
-        <el-table-column
-          inline-template
+        <el-table-column inline-template
           label='价格区间'>
           <div>
             {{ row.data.minprice + '-' + row.data.maxprice}}
           </div>
         </el-table-column>
-        <el-table-column
-          prop='data.gdate'
+        <el-table-column prop='data.gdate'
           label='创建时间'
           :formatter='dateFormatter'>
         </el-table-column>
-        <el-table-column
-          inline-template
+        <el-table-column inline-template
           label='操作'
           width='260'>
           <div>
-            <el-popover
-              ref='deleteConfirm'
+            <el-popover ref='deleteConfirm'
               placement="top"
               width="150"
               v-model="confirmDeletePopover">
               <p>确定删除？</p>
               <div style="text-align: right; margin: 0">
-                <el-button size="mini" type="text" @click="cancelDeleteInfo">取消</el-button>
-                <el-button type="primary" size="mini" @click="handleDeleteInfo($index, row, column)">确定</el-button>
+                <el-button size="mini"
+                  type="text"
+                  @click="cancelDeleteInfo">取消</el-button>
+                <el-button type="primary"
+                  size="mini"
+                  @click="handleDeleteInfo($index, row, column)">确定</el-button>
               </div>
             </el-popover>
-            <el-button
-              size='small'
+            <el-button size='small'
               type='danger'
               @click='confirmDeletePopover = true'
               v-popover:deleteConfirm>
               删除
             </el-button>
-            <el-button
-              size='small'
+            <el-button size='small'
               @click="handleEdit($index, row, column)">
               详情
             </el-button>
-            <el-button
-              size='small'
+            <el-button size='small'
               @click="handleCarouseEdit($index, row, column)">
               轮播
             </el-button>
-            <el-button
-              size='small'
+            <el-button size='small'
               @click="handleCarEdit($index, row, column)">
               车型
             </el-button>
@@ -121,7 +126,9 @@
       </el-table>
     </div>
     <div class="store-detils-edit">
-      <el-dialog title="车系详情" v-model='dialogModelDetilsVisible' v-if="dialogModelDetilsVisible">
+      <el-dialog title="车系详情"
+        v-model='dialogModelDetilsVisible'
+        v-if="dialogModelDetilsVisible">
         <el-form label-width='75px'>
           <el-form-item label='车系'>
             <el-input v-model='detailsModeslInfo.data.gname'></el-input>
@@ -129,15 +136,14 @@
           <el-form-item label='活动'>
             <el-input v-model='detailsModeslInfo.data.title'></el-input>
           </el-form-item>
-          <!-- <el-form-item label='最低价格'>
-            <el-input v-model='detailsModeslInfo.data.minprice'></el-input>
-          </el-form-item>
-          <el-form-item label='最高价格'>
-            <el-input v-model='detailsModeslInfo.data.maxprice'></el-input>
-          </el-form-item> -->
+          <!--<el-form-item label='最低价格'>
+                    <el-input v-model='detailsModeslInfo.data.minprice'></el-input>
+                  </el-form-item>
+                  <el-form-item label='最高价格'>
+                    <el-input v-model='detailsModeslInfo.data.maxprice'></el-input>
+                  </el-form-item>-->
           <el-form-item label='主图'>
-            <el-upload
-              :action="$store.state.baseURL + '/update/image.action'"
+            <el-upload :action="$store.state.baseURL + '/update/image.action'"
               type="drag"
               name='uploadFile'
               :data="{imageName: detailsModeslInfo.data.gshowimage}"
@@ -145,13 +151,14 @@
               :thumbnail-mode="true"
               :default-file-list="[{name: detailsModeslInfo.data.bshowimage, url: $store.state.baseImgURL + detailsModeslInfo.data.gshowimage }]">
               <i class="el-icon-upload"></i>
-              <div class="el-dragger__text">将文件拖到此处，或<em>点击上传</em></div>
+              <div class="el-dragger__text">将文件拖到此处，或
+                <em>点击上传</em>
+              </div>
               <!-- <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div> -->
             </el-upload>
           </el-form-item>
           <el-form-item label='热门'>
-            <el-switch
-              v-model='detailsModeslInfo.data.ishot'
+            <el-switch v-model='detailsModeslInfo.data.ishot'
               on-text='是'
               off-text='否'
               on-color="#13ce66"
@@ -165,15 +172,12 @@
       </el-dialog>
     </div>
     <div class="carouse-edit">
-      <el-dialog
-        size='full'
+      <el-dialog size='full'
         title='轮播图管理'
         v-model="dialogCarouseVisible"
         v-if="dialogCarouseVisible">
-        <template
-          v-for="item in modelInfo[currentCarouseImages.index].bImage">
-          <el-upload
-            type="drag"
+        <template v-for="item in modelInfo[currentCarouseImages.index].bImage">
+          <el-upload type="drag"
             name="uploadFile"
             :action="$store.state.baseURL + '/images/upload.action'"
             :on-success='uploadCarouseSuccess'
@@ -182,26 +186,28 @@
             :data="{id: currentCarouseImages.gid, idName: 'gid', iid: item.iid}"
             :thumbnail-mode="true">
             <i class="el-icon-upload"></i>
-            <div class="el-dragger__text">将文件拖到此处，或<em>点击上传</em></div>
+            <div class="el-dragger__text">将文件拖到此处，或
+              <em>点击上传</em>
+            </div>
             <!-- <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div> -->
           </el-upload>
         </template>
-        <el-upload
-          type="drag"
+        <el-upload type="drag"
           name="uploadFile"
           :action="$store.state.baseURL + '/images/upload.action'"
           :data="{id: currentCarouseImages.gid, idName: 'gid', iid: '-1'}"
           :on-success='uploadCarouseSuccess'
           :thumbnail-mode="true">
           <i class="el-icon-upload"></i>
-          <div class="el-dragger__text">将文件拖到此处，或<em>点击上传</em></div>
+          <div class="el-dragger__text">将文件拖到此处，或
+            <em>点击上传</em>
+          </div>
           <!-- <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div> -->
         </el-upload>
       </el-dialog>
     </div>
     <div class="store-pagination">
-      <el-pagination
-        layout='total, prev, pager, next, jumper'
+      <el-pagination layout='total, prev, pager, next, jumper'
         @current-change="handleCurrentChange"
         :current-page="currentPage"
         :page-size='pageSize'
@@ -233,8 +239,10 @@ export default {
       currentCarouseImages: {},
       dialogAddModelVisible: false,
       dialogModelDetilsVisible: false,
+      dialogCopyModelVisible: false,
       dialogCarouseVisible: false,
-      confirmDeletePopover: false
+      confirmDeletePopover: false,
+      selectedModel: ''
     }
   },
   created() {
@@ -259,6 +267,52 @@ export default {
         this.modelInfo = modeInfo
       })
     },
+    querySearch(queryString, cb) {
+      let reqURL = '/goods/getLikeGname.action'
+      let data = {
+        gname: queryString
+      }
+
+      this.axios.post(reqURL, data, {
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+      }).then(response => {
+        let data = response.data
+        let arr = data.data.map(obj => {
+          let tmpObj = {
+            value: obj.gname,
+            gid: obj.gid,
+            bid: obj.bid
+          }
+          return tmpObj
+        })
+        cb(arr)
+      })
+    },
+    handleModelSelect(item) {
+      let reqURL = '/goods/addNewBidGoods.action'
+      let data = {
+        gid: item.gid,
+        bid: this.$route.query.bid
+      }
+
+      this.$confirm('是否添加 ' + item.value + ' 全部车型', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        // this.axios.post(reqURL, data, {
+        //   headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+        // }).then(response => {
+        //   let data = response.data 
+        // })
+        this.$message({
+          type: 'success',
+          message: '添加成功'
+        })
+      }).catch(() => {
+
+      })
+    },
     resetModelInfo() {
       let modelInfo = {
         gname: '',
@@ -276,7 +330,7 @@ export default {
         url: '/goods/add.action',
         method: 'post',
         data: this.newModelInfo,
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded'}
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
       }).then(response => {
         let data = response.data
         if (data.status == 200) {
@@ -300,7 +354,7 @@ export default {
       return str
     },
     handleCarEdit($index, row, column) {
-      this.$router.push({name: 'CarList', query: { gid: row.data.gid, bid: row.data.bid, bname: this.bname, gname: row.data.gname}})
+      this.$router.push({ name: 'CarList', query: { gid: row.data.gid, bid: row.data.bid, bname: this.bname, gname: row.data.gname } })
     },
     handleCurrentChange(val) {
       this.currentPage = val
@@ -331,8 +385,8 @@ export default {
             this.initData(this.currentPage)
           }
 
-          if(pageXSize = this.pageNum) {
-            if (this.pageNum % this.pageSize == 1 && this.currentPage!= 1) {
+          if (pageXSize = this.pageNum) {
+            if (this.pageNum % this.pageSize == 1 && this.currentPage != 1) {
               this.initData(this.currentPage - 1)
             } else {
               this.initData(this.currentPage)
@@ -365,7 +419,7 @@ export default {
         url: '/goods/update.action',
         method: 'post',
         data: data,
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded'}
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
       }).then(response => {
         let data = response.data
         if (data.status == 200) {
@@ -394,7 +448,7 @@ export default {
         iid: file.iid
       }
       this.axios.post(reqURL, data, {
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded'}
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
       }).then(response => {
         let data = response.data
         this.initData(this.currentPage)
@@ -404,5 +458,8 @@ export default {
 }
 </script>
 
-<style lang="css">
+<style>
+.store-tooltip .el-button {
+  margin-left: 0;
+}
 </style>

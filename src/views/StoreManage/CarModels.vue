@@ -300,14 +300,15 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        // this.axios.post(reqURL, data, {
-        //   headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-        // }).then(response => {
-        //   let data = response.data 
-        // })
+        this.axios.post(reqURL, data, {
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }).then(response => {
+          let data = response.data 
+          this.initData()
+        })
         this.$message({
           type: 'success',
-          message: '添加成功'
+          message: '请求已提交，30秒内完成'
         })
       }).catch(() => {
 

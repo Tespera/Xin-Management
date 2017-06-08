@@ -15,6 +15,11 @@ import Coupon from './views/CarMaintain/Coupon.vue'
 import PlatformSetting from './views/PlatformSetting.vue'
 import MaintainSetting from './views/CarMaintain/MaintainSetting.vue'
 
+import PlatformInfo from './views/PlatformInfo.vue'
+import ArticleList from './views/PlatformInfo/ArticleList.vue'
+import AddArticle from './views/PlatformInfo/AddArticle.vue'
+import EditArticle from './views/PlatformInfo/EditArticle.vue'
+
 const routes = [
   {
     path: '/',
@@ -80,6 +85,30 @@ const routes = [
             name: 'MaintainSetting',
             meta: { navIndex: '2-3'},
             component: MaintainSetting
+          }
+        ]
+      },
+      {
+        path: 'info',
+        name: 'PlatformInfo',
+        component: PlatformInfo,
+        meta: { navIndex: '3'},
+        children: [
+          {
+            path: 'list',
+            name: 'ArticleList',
+            component: ArticleList,
+            meta: { navIndex: '3-1'}
+          },
+          {
+            path: 'new',
+            name: 'AddArticle',
+            component: AddArticle,
+          },
+          {
+            path: 'edit',
+            name: 'EditArticle',
+            component: EditArticle
           }
         ]
       }

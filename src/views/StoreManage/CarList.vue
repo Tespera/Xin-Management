@@ -527,7 +527,7 @@ export default {
         url: '/model/add.action',
         method: 'post',
         data: this.newCarInfo,
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded'}
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
       }).then(response => {
         let data = response.data
         if (data.status == 200) {
@@ -573,8 +573,8 @@ export default {
             this.initData(this.currentPage)
           }
 
-          if(pageXSize = this.pageNum) {
-            if (this.pageNum % this.pageSize == 1 && this.currentPage!= 1) {
+          if (pageXSize = this.pageNum) {
+            if (this.pageNum % this.pageSize == 1 && this.currentPage != 1) {
               this.initData(this.currentPage - 1)
             } else {
               this.initData(this.currentPage)
@@ -605,7 +605,7 @@ export default {
         url: '/model/update.action',
         method: 'post',
         data: data,
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded'}
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
       }).then(response => {
         let data = response.data
         if (data.status == 200) {
@@ -646,7 +646,7 @@ export default {
         iid: file.iid
       }
       this.axios.post(reqURL, data, {
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded'}
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
       }).then(response => {
         let data = response.data
         this.initData(this.currentPage)

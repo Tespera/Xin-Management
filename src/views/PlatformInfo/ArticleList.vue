@@ -12,6 +12,10 @@
           {{ item.ntitle }}
         </h3>
         <div class="function">
+          <div class="cover"
+            @click='handleCover(item)'>
+            封面
+          </div>
           <div class="edit"
             @click="$router.push({name: 'EditArticle', query: { nid:item.nid }})">
             编辑
@@ -23,11 +27,31 @@
         </div>
       </div>
     </div>
-    <el-dialog :title='previeContent.ntitle'
+    <el-dialog top='5%'
+      :title='previeContent.ntitle'
       v-model="previewDialogVisbile">
-      <div v-html='previeContent.ncontent'>
-  
-      </div>
+      <div>作者：{{previeContent.author}}</div>
+      <img class='article-cover'
+        :src="$store.state.baseImgURL + previeContent.image"
+        alt="pic">
+      <div v-html='previeContent.ncontent'></div>
+    </el-dialog>
+    <el-dialog top='5%'
+      size='tiny'
+      title='上传封面'
+      v-model="coverDialogVisbile">
+      <el-upload v-if="coverDialogVisbile"
+        :action="$store.state.baseURL + '/news/upload.action'"
+        type='drag'
+        name="uploadFile"
+        :thumbnail-mode="true"
+        :default-file-list="[{url: coverURL}]"
+        :data="{ nid: coverNid }">
+        <i class="el-icon-upload"></i>
+        <div class="el-dragger__text">将文件拖到此处，或
+          <em>点击上传</em>
+        </div>
+      </el-upload>
     </el-dialog>
   </div>
 </template>
@@ -38,7 +62,10 @@ export default {
     return {
       articleList: [],
       previewDialogVisbile: false,
-      previeContent: {}
+      coverDialogVisbile: false,
+      previeContent: {},
+      coverNid: -1,
+      coverURL: ''
     }
   },
   created() {
@@ -53,6 +80,11 @@ export default {
         this.articleList = data.data
       })
     },
+    handleCover(item) {
+      this.coverNid = item.nid
+      this.coverURL = this.$store.state.baseImgURL + item.image
+      this.coverDialogVisbile = true
+    },
     handlePreview(item) {
       this.previeContent = item
       this.previewDialogVisbile = true
@@ -62,7 +94,7 @@ export default {
       let data = { nid }
 
       this.axios.post(reqURL, data, {
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded'}
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
       }).then(response => {
         let data = response.data
         if (data.status == 200) {
@@ -113,5 +145,18 @@ export default {
 .article-list .function div {
   margin: 0 5px;
   cursor: pointer;
+}
+
+.article-list .el-dialog__body {
+  padding-top: 0px;
+}
+
+.article-list .el-dialog__body .article-cover {
+  margin-top: 5px;
+  max-width: 100%;
+}
+
+.article-list .el-dialog__body>div {
+  margin-top: 5px;
 }
 </style>

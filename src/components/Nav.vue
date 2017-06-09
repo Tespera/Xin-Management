@@ -43,6 +43,17 @@
             <i class="el-icon-setting"></i>优惠券管理
           </el-menu-item>
         </el-submenu>
+        <el-submenu index='3'>
+          <template slot='title'>
+            <!-- <i class="el-icon-message"></i> -->
+            新闻资讯
+          </template>
+            <el-menu-item
+            index='3-1'
+            @click.native="handleClick('ArticleList')">
+            <i class="el-icon-setting"></i>文章管理
+          </el-menu-item>
+        </el-submenu>
       </el-menu>
   </div>
 </template>
@@ -52,18 +63,18 @@ export default {
   data() {
     return {
       defaultActive: '0',
-      defaultOpeneds: ['1', '2']
+      defaultOpeneds: ['1', '2', '3']
     }
   },
   created() {
-    // let currentPath = this.$route.meta.navIndex
-    // if(!!currentPath) {
-    //   this.defaultActive = currentPath
-    // }
+    let currentPath = this.$route.meta.navIndex
+    if (!!currentPath) {
+      this.defaultActive = currentPath
+    }
   },
   methods: {
     handleClick(path) {
-      this.$router.push({ name: path})
+      this.$router.push({ name: path })
     }
   }
 }

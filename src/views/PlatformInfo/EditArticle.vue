@@ -32,6 +32,7 @@ export default {
   },
   mounted() {
     let editor = new E('.editor')
+    editor.customConfig.uploadImgServer = this.$store.state.baseURL + '/news/cupload.action'
     editor.create()
     this.editor = editor
   },

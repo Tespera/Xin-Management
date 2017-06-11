@@ -108,7 +108,8 @@ export default {
       }).then(response => {
         let data = response.data
         if (data.status == 200) {
-          this.initDate(currentPage)
+          this.cancelDeleteInfo()
+          this.initDate(this.currentPage)
         }
       })
     },

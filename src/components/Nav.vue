@@ -8,50 +8,73 @@
         :default-openeds='defaultOpeneds'>
         <el-submenu index='1'>
           <template slot='title'>
-            <!-- <i class="el-icon-message"></i> -->
             购车模块
           </template>
           <el-menu-item
             index='1-1'
             @click.native="handleClick('StoreDetils')">
-            <i class="el-icon-setting"></i>4S店管理
+            4S店管理
           </el-menu-item>
           <el-menu-item
             index='1-2'
             @click.native="handleClick('Platform')">
-            <i class="el-icon-setting"></i>平台管理
+            平台管理
           </el-menu-item>
         </el-submenu>
         <el-submenu index='2'>
           <template slot='title'>
-            <!-- <i class="el-icon-message"></i> -->
             养车模块
           </template>
           <el-menu-item
             index='2-1'
             @click.native="handleClick('StoreMaintain')">
-            <i class="el-icon-setting"></i>养车门店
+            养车门店
           </el-menu-item>
           <el-menu-item
             index='2-3'
             @click.native="handleClick('MaintainSetting')">
-            <i class="el-icon-setting"></i>养车管理
+            养车管理
           </el-menu-item>
           <el-menu-item
             index='2-2'
             @click.native="handleClick('Coupon')">
-            <i class="el-icon-setting"></i>优惠券管理
+            优惠券管理
           </el-menu-item>
         </el-submenu>
         <el-submenu index='3'>
           <template slot='title'>
-            <!-- <i class="el-icon-message"></i> -->
             新闻资讯
           </template>
             <el-menu-item
             index='3-1'
             @click.native="handleClick('ArticleList')">
-            <i class="el-icon-setting"></i>文章管理
+            文章管理
+          </el-menu-item>
+        </el-submenu>
+        <el-submenu index='4'>
+          <template slot='title'>
+            订单管理
+          </template>
+            <el-menu-item
+            index='4-1'
+            @click.native="handleClick('OrderList')">
+            订车订单
+          </el-menu-item>
+          <el-menu-item
+            index='4-2'
+            @click.native="handleClick('MaintainOrder')">
+            养车订单
+          </el-menu-item>
+          
+        </el-submenu>
+        <el-submenu index='5'>
+          <template slot='title'>
+            用户管理
+          </template>
+            <el-menu-item
+            index='5-1'
+            @click.native="handleClick('UserList')">
+            用户列表
           </el-menu-item>
         </el-submenu>
       </el-menu>

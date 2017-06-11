@@ -25,6 +25,7 @@ import UserList from './views/UserManage/UserList.vue'
 
 import OrderManage from './views/OrderManage.vue'
 import OrderList from './views/OrderManage/OrderList.vue'
+import MaintainOrder from './views/OrderManage/MaintainOrder.vue'
 
 const routes = [
   {
@@ -129,6 +130,12 @@ const routes = [
             name: 'OrderList',
             component: OrderList,
             meta: { navIndex: '4-1' }
+          },
+          {
+            path: 'maintain',
+            name: 'MaintainOrder',
+            component: MaintainOrder,
+            meta: { navIndex: '4-2'}
           }
         ]
       },

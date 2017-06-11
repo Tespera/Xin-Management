@@ -1,5 +1,5 @@
 <template>
-  <div class="order-list">
+  <div class="order-list maintain-order">
     <div class="order-tooltip">
       <el-select v-model="status"
         placeholder='请选择订单类型'>
@@ -10,35 +10,29 @@
       </el-select>
     </div>
     <el-table :data='orderData'>
-      <el-table-column prop='bname'
+      <el-table-column prop='bmname'
         label='商家名'>
       </el-table-column>
-      <el-table-column prop='buytime'
-        label='购车时间'>
+      <el-table-column prop='price'
+        label='支付金额'>
       </el-table-column>
-      <el-table-column prop='cardCity'
-        label='上牌城市'>
+      <el-table-column prop='price'
+        label='支付金额'>
       </el-table-column>
-      <el-table-column prop='city'
-        label='上牌城市'>
+      <el-table-column inline-template
+        label='使用状态'>
+        <div>
+          {{ !!row.ruid?'已使用':'未使用' }}
+        </div>
       </el-table-column>
-      <el-table-column prop='buyWay'
-        label='购买方式'>
+      <el-table-column prop='sname'
+        label='服务名'>
       </el-table-column>
-      <el-table-column prop='color'
-        label='车身颜色'>
+      <el-table-column prop='uname'
+        label='用户名'>
       </el-table-column>
-      <el-table-column prop='gname'
-        label='车系'>
-      </el-table-column>
-      <el-table-column prop='mname'
-        label='车型'>
-      </el-table-column>
-      <el-table-column prop='bphone'
-        label='商家电话'>
-      </el-table-column>
-      <el-table-column prop='date'
-        label='生成日期'>
+      <el-table-column prop='uphone'
+        label='用户电话'>
       </el-table-column>
       <el-table-column prop='goodid'
         label='商品号'>
@@ -46,17 +40,11 @@
       <el-table-column prop='qid'
         label='流水号'>
       </el-table-column>
-      <el-table-column prop='uphone'
-        label='用户电话'>
+      <el-table-column prop='date'
+        label='生成日期'>
       </el-table-column>
-      <el-table-column prop='uname'
-        label='用户名'>
-      </el-table-column>
-      <el-table-column prop='sname'
-        label='服务名'>
-      </el-table-column>
-      <el-table-column prop='price'
-        label='支付金额'>
+      <el-table-column prop='bphone'
+        label='商家电话'>
       </el-table-column>
       <el-table-column inline-template
         v-if="status == 1"
@@ -143,7 +131,7 @@ export default {
     initData(pageNum) {
       let status = this.status
       let page = pageNum || 1
-      let reqURL = '/YcOreder/selectYcOreder.action?status=' + status + '&type=0&page=' + page
+      let reqURL = '/YcOreder/selectYcOreder.action?status=' + status + '&type=1&page=' + page
 
       this.axios.get(reqURL).then(response => {
         let data = response.data

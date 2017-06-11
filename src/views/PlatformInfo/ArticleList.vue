@@ -5,8 +5,19 @@
         <div class="add-article"
           @click="$router.push({name: 'AddArticle'})">添加文章</div>
       </div>
+      <div class="list-header article-item">
+        <div class="catalog">
+          类型
+        </div>
+        <h3 class="title">
+          文章标题
+        </h3>
+      </div>
       <div class='article-item'
         v-for="item in articleList">
+        <div class="catalog">
+          {{ item.cname }}
+        </div>
         <h3 class="title"
           @click='handlePreview(item)'>
           {{ item.ntitle }}
@@ -26,6 +37,14 @@
           </div>
         </div>
       </div>
+    </div>
+    <div class="pagination">
+      <el-pagination small
+        layout='prev, pager, next'
+        :total='total'
+        :page-size='10'
+        @current-change='currentChange'>
+      </el-pagination>
     </div>
     <el-dialog top='5%'
       :title='previeContent.ntitle'
@@ -60,25 +79,54 @@
 export default {
   data() {
     return {
+      total: 0,
       articleList: [],
       previewDialogVisbile: false,
       coverDialogVisbile: false,
       previeContent: {},
       coverNid: -1,
-      coverURL: ''
+      coverURL: '',
     }
   },
   created() {
     this.initData()
   },
   methods: {
-    initData() {
-      let reqURL = '/news/selectAll.action'
+    initData(page) {
+      let currentPage = page || 1
+      let reqURL = '/news/selectAll.action?page=' + currentPage
+      let reqCatalogURL = '/NewCatalog/selectAll.action'
 
       this.axios.get(reqURL).then(response => {
         let data = response.data
-        this.articleList = data.data
+        this.total = data.total
+        this.articleList = data.rows
+
+        this.axios.get(reqCatalogURL).then(response => {
+          let data = response.data
+
+          if (data.status == 200) {
+            this.$store.commit('initArticleCatalogState', data.data)
+            for (let item of this.articleList) {
+              item.cname = this.catalogfilter(item.cid)
+            }
+          }
+
+          this.articleList.splice()
+        })
       })
+    },
+    currentChange(currentPage) {
+      this.initData(currentPage)
+    },
+    catalogfilter(cid) {
+      let arcitleCatalog = this.$store.state.arcitleCatalog
+
+      for (let item of arcitleCatalog) {
+        if (item.catid == cid) {
+          return item.cname
+        }
+      }
     },
     handleCover(item) {
       this.coverNid = item.nid
@@ -101,7 +149,7 @@ export default {
           this.initData()
         }
       })
-    }
+    },
   }
 }
 </script>
@@ -116,6 +164,8 @@ export default {
   padding-top: 20px;
 }*/
 
+
+
 .article-list .list-function>div {
   cursor: pointer
 }
@@ -123,6 +173,11 @@ export default {
 .article-list .list-container .article-item {
   display: flex;
   padding: 20px 0 0;
+}
+
+.article-list .article-item .catalog {
+  min-width: 2em;
+  margin-right: 5px;
 }
 
 .article-list .article-item .title {
@@ -145,6 +200,12 @@ export default {
 .article-list .function div {
   margin: 0 5px;
   cursor: pointer;
+}
+
+.article-list .pagination {
+  display: flex;
+  padding-right: 30px;
+  justify-content: center
 }
 
 .article-list .el-dialog__body {

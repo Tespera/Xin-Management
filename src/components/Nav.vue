@@ -63,7 +63,7 @@ export default {
   data() {
     return {
       defaultActive: '0',
-      defaultOpeneds: ['1', '2', '3']
+      defaultOpeneds: []
     }
   },
   created() {

@@ -50,6 +50,11 @@
             @click.native="handleClick('ArticleList')">
             文章管理
           </el-menu-item>
+          <el-menu-item
+            index='3-2'
+            @click.native="handleClick('ArticleType')">
+            文章类型
+          </el-menu-item>
         </el-submenu>
         <el-submenu index='4'>
           <template slot='title'>
@@ -65,7 +70,6 @@
             @click.native="handleClick('MaintainOrder')">
             养车订单
           </el-menu-item>
-          
         </el-submenu>
         <el-submenu index='5'>
           <template slot='title'>
@@ -75,6 +79,31 @@
             index='5-1'
             @click.native="handleClick('UserList')">
             用户列表
+          </el-menu-item>
+        </el-submenu>
+        <el-submenu index='6'>
+          <template slot='title'>
+            询价管理
+          </template>
+          <el-menu-item
+            index='6-1'
+            @click.native="handleClick('EnquiryUnprocessed')">
+            未处理
+          </el-menu-item>
+          <el-menu-item
+            index='6-2'
+            @click.native="handleClick('EnquiryProcessed')">
+            已处理
+          </el-menu-item>
+        </el-submenu>
+        <el-submenu index='7'>
+          <template slot='title'>
+            评论管理
+          </template>
+          <el-menu-item
+            index='7-1'
+            @click.native="handleClick('HandleComments')">
+            评论管理
           </el-menu-item>
         </el-submenu>
       </el-menu>

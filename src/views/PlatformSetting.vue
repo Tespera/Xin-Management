@@ -3,9 +3,13 @@
     v-loading='loadingStatus'>
     <el-form label-width='75px' class="title-stage-form">
       <h3>平台活动管理</h3>
-      <el-form-item label='平台活动'>
+      <el-form-item label='购车活动'>
         <el-input v-model='titleStage.title2'>
         </el-input><el-button type='primary' @click="submitTitleInfo('title2', titleStage.title2)">修改</el-button>
+      </el-form-item>
+      <el-form-item label='养车活动'>
+        <el-input v-model='titleStage.mbtitle2'>
+        </el-input><el-button type='primary' @click="submitTitleInfo('mbtitle2', titleStage.mbtitle2)">修改</el-button>
       </el-form-item>
       <el-form-item label='12期利率'>
         <el-input v-model='titleStage.stages12'>

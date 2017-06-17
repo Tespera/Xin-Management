@@ -19,6 +19,7 @@ import PlatformInfo from './views/PlatformInfo.vue'
 import ArticleList from './views/PlatformInfo/ArticleList.vue'
 import AddArticle from './views/PlatformInfo/AddArticle.vue'
 import EditArticle from './views/PlatformInfo/EditArticle.vue'
+import ArticleType from './views/PlatformInfo/ArticleType.vue'
 
 import UserManage from './views/UserManage.vue'
 import UserList from './views/UserManage/UserList.vue'
@@ -26,6 +27,13 @@ import UserList from './views/UserManage/UserList.vue'
 import OrderManage from './views/OrderManage.vue'
 import OrderList from './views/OrderManage/OrderList.vue'
 import MaintainOrder from './views/OrderManage/MaintainOrder.vue'
+
+import EnquiryManage from './views/EnquiryManage.vue'
+import EnquiryUnprocessed from './views/EnquiryManage/EnquiryUnprocessed.vue'
+import EnquiryProcessed from './views/EnquiryManage/EnquiryProcessed.vue'
+
+import CommentsManage from './views/CommentsManage.vue'
+import HandleComments from './views/CommentsManage/HandleComments.vue'
 
 const routes = [
   {
@@ -116,6 +124,12 @@ const routes = [
             path: 'edit',
             name: 'EditArticle',
             component: EditArticle
+          },
+          {
+            path: 'type',
+            name: 'ArticleType',
+            component: ArticleType,
+            meta: { navIndex: '3-2'}
           }
         ]
       },
@@ -150,6 +164,40 @@ const routes = [
             name: 'UserList',
             component: UserList,
             meta: { navIndex: '5-1' }
+          }
+        ]
+      },
+      {
+        path: 'enquiry',
+        name: 'EnquiryManage',
+        component: EnquiryManage,
+        meta: { navIndex: '6'},
+        children: [
+          {
+            path: 'unprocessed',
+            name: 'EnquiryUnprocessed',
+            component: EnquiryUnprocessed,
+            meta: { navIndex: '6-1'},
+          },
+          {
+            path: 'processed',
+            name: 'EnquiryProcessed',
+            component: EnquiryProcessed,
+            meta: { navIndex: '6-2'},
+          }
+        ]
+      },
+      {
+        path: 'comments',
+        name: 'CommentsManage',
+        component: CommentsManage,
+        meta: { navIndex: '7'},
+        children: [
+          {
+            path: 'handle',
+            name: 'HandleComments',
+            component: HandleComments,
+            meta: { navIndex: '7-1' }
           }
         ]
       }

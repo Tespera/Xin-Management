@@ -23,7 +23,8 @@
         </div>
       </el-table-column>
       <el-table-column inline-template
-        label='操作'>
+        label='操作'
+        width='260px'>
         <div>
           <el-popover ref='deleteConfirm'
             placement="top"
@@ -51,6 +52,14 @@
             @click='handleStatusToggle(row)'>
             {{ !!row.status?'禁用':'启用'}}
           </el-button>
+          <el-button size='small'
+            @click='handleCheckClick(row.uid)'>
+            查看
+          </el-button>
+          <el-button size='small'
+            @click='handleDistributClick(row.uid)'>
+            分配
+          </el-button>
         </div>
       </el-table-column>
     </el-table>
@@ -62,6 +71,55 @@
         :total='total'>
       </el-pagination>
     </div>
+    <el-dialog title='分配优惠券'
+      v-model='distributDialogVisible'>
+      <el-table :data='coupons'>
+        <el-table-column prop='rname'
+          label='名称'>
+        </el-table-column>
+        <el-table-column prop='price'
+          label='优惠价格'>
+        </el-table-column>
+        <el-table-column inline-template
+          label='类型'>
+          <div>
+            {{ couponsType(row.type) }}
+          </div>
+        </el-table-column>
+        <el-table-column inline-template
+          label='操作'>
+          <div>
+            <el-button size='small'
+              @click='handeleDistribut()'>
+              分配
+            </el-button>
+          </div>
+        </el-table-column>
+      </el-table>
+    </el-dialog>
+    <el-dialog title='查看优惠券'
+      v-model='checkDialogVisible'>
+      <el-table :data='userCoupon'>
+        <el-table-column prop='rname'
+          label='名称'>
+        </el-table-column>
+        <el-table-column prop='price'
+          label='优惠价格'>
+        </el-table-column>
+        <el-table-column prop='createdate'
+          label='创建日期'>
+        </el-table-column>
+        <el-table-column prop='pastdate'
+          label='过期日期'>
+        </el-table-column>
+        <el-table-column inline-template
+          label='状态'>
+          <div>
+            {{ couponsStatusType(row.type) }}
+          </div>
+        </el-table-column>
+      </el-table>
+    </el-dialog>
   </div>
 </template>
 
@@ -72,7 +130,12 @@ export default {
       userData: [],
       total: 0,
       confirmDeletePopover: false,
-      currentPage: 1
+      currentPage: 1,
+      coupons: [],
+      distributDialogVisible: false,
+      checkDialogVisible: false,
+      distributUid: -1,
+      userCoupon: []
     }
   },
   created() {
@@ -87,6 +150,15 @@ export default {
         let data = response.data
         this.total = data.total
         this.userData = data.rows
+      })
+
+      let reqCoupons = '/roll/getall.action'
+
+      this.axios.get(reqCoupons).then(response => {
+        let data = response.data
+        if (data.status == 200) {
+          this.coupons = data.data
+        }
       })
     },
     cancelDeleteInfo() {
@@ -125,6 +197,68 @@ export default {
           this.initDate(this.currentPage)
         }
       })
+    },
+    handeleDistribut() {
+      let reqURL = '/roll/add.action'
+      let data = { uid: this.distributUid }
+
+      this.axios.post(reqURL, data, {
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+      }).then(response => {
+        let data = response.data
+        if (data.status == 200) {
+          this.$message({
+            message: '操作成功',
+            type: 'success'
+          });
+        }
+      })
+    },
+    handleCheckClick(uid) {
+      let reqURL = '/RollUser/findByUid.action'
+      let data = { uid }
+
+      this.axios.post(reqURL, data, {
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+      }).then(response => {
+        let data = response.data
+        if (data.status == 200) {
+          this.userCoupon = data.data
+          this.checkDialogVisible = true
+        }
+      })
+    },
+    handleDistributClick(uid) {
+      this.distributUid = uid
+      this.distributDialogVisible = true
+    },
+    couponsType(type) {
+      switch (type) {
+        case 0:
+          return '通用'
+        case 1:
+          return '清洗'
+        case 2:
+          return '保养'
+        case 3:
+          return '装饰'
+        default:
+          break;
+      }
+    },
+    couponsStatusType(type) {
+      switch (type) {
+        case 0:
+          return '待使用'
+        case 1:
+          return '已使用'
+        case 2:
+          return '已失效过期'
+        case 3:
+          return '占用中'
+        default:
+          break;
+      }
     }
   }
 }

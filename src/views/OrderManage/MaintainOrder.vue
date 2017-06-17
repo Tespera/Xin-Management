@@ -154,8 +154,7 @@ export default {
     handleRefundInfo(row) {
       let reqURL = '/YcOreder/payBlack.action'
       let data = {
-        goodid: row.goodid,
-        qid: row.qid
+        yoid: row.yoid,
       }
 
       this.axios.post(reqURL, data, {

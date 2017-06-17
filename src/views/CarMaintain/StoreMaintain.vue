@@ -40,6 +40,10 @@
           <el-input v-model='newStoreInfo.time'>
           </el-input>
         </el-form-item>
+        <el-form-item label='活动'>
+          <el-input v-model='newStoreInfo.title1'>
+          </el-input>
+        </el-form-item>
         <el-form-item label='密码'>
           <el-input v-model='newStoreInfo.mpassword'>
           </el-input>
@@ -158,6 +162,9 @@
           </el-form-item>
           <el-form-item label='营业时间'>
             <el-input v-model='detailsStoreInfo.time'></el-input>
+          </el-form-item>
+          <el-form-item label='活动'>
+            <el-input v-model='detailsStoreInfo.title1'></el-input>
           </el-form-item>
           <el-form-item label='密码'>
             <el-input v-model='detailsStoreInfo.mpassword'></el-input>
@@ -317,7 +324,8 @@ export default {
         uname: '',
         longitude: '',
         latitude: '',
-        time: ''
+        time: '',
+        title1: ''
       }
       this.newStoreInfo = storeInfo
     },

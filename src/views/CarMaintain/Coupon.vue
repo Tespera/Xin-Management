@@ -152,7 +152,7 @@ export default {
     cptCouponRule() {
       let arr = []
 
-      for(let item of this.couponRule) {
+      for (let item of this.couponRule) {
         let param = item.param
 
         param = JSON.parse(param);
@@ -166,7 +166,7 @@ export default {
     this.initData()
   },
   methods: {
-    initData () {
+    initData() {
       let reqURL = '/roll/getall.action'
 
       this.axios.get(reqURL).then(response => {
@@ -188,7 +188,7 @@ export default {
       }
 
       this.axios.post(reqURL, data, {
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded'}
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
       }).then(response => {
         let data = response.data
 
@@ -203,8 +203,8 @@ export default {
       let data = this.newCoupons
 
       this.axios.post(reqURL, data, {
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded'}
-      }).then( response => {
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+      }).then(response => {
         let data = response.data
         if (data.status == 200) {
           this.dialogAddVisible = false
@@ -223,7 +223,7 @@ export default {
         obj.param = JSON.stringify(that.cptCouponRule[index])
 
         that.axios.post(reqURL, obj, {
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded'}
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
         }).then(response => {
           let data = response.data
           if (data.status == 200) {
@@ -280,12 +280,12 @@ export default {
   margin: 0px 0 5px;
 }
 
-.coupon .coupon_container .coupon_content > span:nth-of-type(1),
-.coupon .coupon_container .coupon_content > span:nth-of-type(2) {
+.coupon .coupon_container .coupon_content>span:nth-of-type(1),
+.coupon .coupon_container .coupon_content>span:nth-of-type(2) {
   margin-bottom: 5px;
 }
 
-.coupon .coupon_container .coupon_content > span {
+.coupon .coupon_container .coupon_content>span {
   display: block;
 }
 
@@ -342,5 +342,4 @@ export default {
   flex-grow: 1;
   max-width: 700px;
 }
-
 </style>

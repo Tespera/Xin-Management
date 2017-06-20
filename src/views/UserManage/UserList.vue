@@ -57,7 +57,7 @@
             查看
           </el-button>
           <el-button size='small'
-            @click='handleDistributClick(row.uid)'>
+            @click='handleDistributClick(row.uid, row.rid)'>
             分配
           </el-button>
         </div>
@@ -90,7 +90,7 @@
           label='操作'>
           <div>
             <el-button size='small'
-              @click='handeleDistribut()'>
+              @click='handeleDistribut(row.rid)'>
               分配
             </el-button>
           </div>
@@ -115,7 +115,7 @@
         <el-table-column inline-template
           label='状态'>
           <div>
-            {{ couponsStatusType(row.type) }}
+            {{ couponsStatusType(row.status) }}
           </div>
         </el-table-column>
       </el-table>
@@ -135,6 +135,7 @@ export default {
       distributDialogVisible: false,
       checkDialogVisible: false,
       distributUid: -1,
+      distributRid: -1,
       userCoupon: []
     }
   },
@@ -198,9 +199,12 @@ export default {
         }
       })
     },
-    handeleDistribut() {
-      let reqURL = '/roll/add.action'
-      let data = { uid: this.distributUid }
+    handeleDistribut(rid) {
+      let reqURL = '/RollUser/add.action '
+      let data = { 
+        uid: this.distributUid,
+        rid
+      }
 
       this.axios.post(reqURL, data, {
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' }

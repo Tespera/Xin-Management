@@ -16,14 +16,14 @@
       <el-table-column prop='price'
         label='支付金额'>
       </el-table-column>
-      <el-table-column prop='price'
-        label='支付金额'>
+      <el-table-column prop='realprice'
+        label='原价'>
       </el-table-column>
-      <el-table-column inline-template
+      <!--<el-table-column inline-template
         label='使用状态'>
         <div>
           {{ !!row.ruid?'已使用':'未使用' }}
-        </div>
+        </div>-->
       </el-table-column>
       <el-table-column prop='sname'
         label='服务名'>
